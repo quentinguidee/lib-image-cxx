@@ -1,0 +1,23 @@
+BasedOnStyle: Google
+
+IndentWidth: 4
+AccessModifierOffset: -4
+
+BreakConstructorInitializers: AfterColon
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterEnum: true
+    AfterClass: true
+    AfterStruct: true
+    BeforeElse: true
+    AfterControlStatement: true
+    AfterFunction: true
+    SplitEmptyFunction: false
+
+AllowShortCaseLabelsOnASingleLine: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+
+ColumnLimit: 0
+
+FixNamespaceComments: false
