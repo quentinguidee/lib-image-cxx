@@ -9,7 +9,7 @@ void QOI::Image::encode(OutputStream& out)
     header.encode(out);
 
     Color previously_seen_pixels[64];
-    Color previous_color(0, 0, 0, 255);
+    Color previous_color;
     uint8_t run_count = 0;
 
     for (long i = 0; i < pixels.size(); ++i)
@@ -88,7 +88,7 @@ void QOI::Image::decode(InputStream& in)
     pixels.reserve(get_width() * get_height());
 
     Color previously_seen_pixels[64];
-    Color previous_color(0, 0, 0, 255);
+    Color previous_color;
 
     long i = 0;
     while (i < size)
