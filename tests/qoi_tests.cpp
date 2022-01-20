@@ -235,6 +235,4 @@ TEST(QOIFormatTest, QOIToImage)
     std::ifstream exported("test_images/image_1_out.qoi");
     while (!original.eof() && !exported.eof())
         ASSERT_EQ(original.get(), exported.get());
-
-    in.close();
 }
