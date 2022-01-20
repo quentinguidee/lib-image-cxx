@@ -10,7 +10,7 @@ void QOI::Image::encode(OutputStream& out)
 
     Color previously_seen_pixels[64];
     Color previous_color(0, 0, 0, 255);
-    int run_count = 0;
+    uint8_t run_count = 0;
 
     for (long i = 0; i < pixels.size(); ++i)
     {
