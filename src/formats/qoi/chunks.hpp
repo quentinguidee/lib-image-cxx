@@ -127,11 +127,6 @@ public:
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
-    uint8_t get_r() const { return color.red; }
-    uint8_t get_g() const { return color.green; }
-    uint8_t get_b() const { return color.blue; }
-    uint8_t get_a() const { return color.alpha; }
-
     const Color& get_color() const { return color; }
 
     bool operator==(const Pixel& rhs) const;
