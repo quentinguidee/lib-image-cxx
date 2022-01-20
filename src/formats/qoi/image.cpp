@@ -80,7 +80,7 @@ void QOI::Image::encode(OutputStream& out)
 
 void QOI::Image::decode(InputStream& in)
 {
-    long size = in.size() - 14 - 8;
+    long size = in.size() - Header::SIZE - Footer::SIZE;
 
     header.decode(in);
 

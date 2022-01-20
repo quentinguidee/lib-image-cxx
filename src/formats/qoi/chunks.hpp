@@ -179,6 +179,9 @@ public:
 class Footer : public Chunk
 {
 public:
+    static const uint8_t SIZE = 8;
+
+public:
     Footer() {}
     Footer(InputStream& in);
 
