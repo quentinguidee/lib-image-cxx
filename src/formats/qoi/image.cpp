@@ -67,9 +67,9 @@ void QOI::Image::encode(OutputStream& out)
             {
                 Pixel(current_color, Channels::RGBA).encode(out);
             }
+            previously_seen_pixels[index] = current_color;
+            previous_color = current_color;
         }
-        previously_seen_pixels[current_color.hash()] = current_color;
-        previous_color = current_color;
     }
 
     if (run_count != 0)
