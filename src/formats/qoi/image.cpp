@@ -6,7 +6,7 @@
 
 void QOI::Image::encode(OutputStream& out)
 {
-    Header(width, height, channels, colorspace).encode(out);
+    header.encode(out);
 
     Color previously_seen_pixels[64];
     Color previous_color(0, 0, 0, 255);
@@ -14,7 +14,7 @@ void QOI::Image::encode(OutputStream& out)
 
     for (long i = 0; i < pixels.size(); ++i)
     {
-        Color& current_color = pixels[i];
+        const Color& current_color = pixels[i];
         if (current_color == previous_color)
         {
             ++run_count;
@@ -82,15 +82,10 @@ void QOI::Image::decode(InputStream& in)
 {
     long size = in.size() - 14 - 8;
 
-    Header header(in);
-
-    width = header.get_width();
-    height = header.get_height();
-    channels = header.get_channels();
-    colorspace = header.get_colorspace();
+    header.decode(in);
 
     pixels.clear();
-    pixels.reserve(width * height);
+    pixels.reserve(get_width() * get_height());
 
     Color previously_seen_pixels[64];
     Color previous_color(0, 0, 0, 255);

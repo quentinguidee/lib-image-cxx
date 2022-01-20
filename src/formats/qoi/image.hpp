@@ -11,9 +11,7 @@ class Image
 {
 private:
     std::vector<Color> pixels;
-    uint32_t width, height;
-    Channels channels;
-    Colorspace colorspace;
+    Header header;
 
 public:
     void encode(OutputStream& out);
@@ -22,9 +20,10 @@ public:
     // void show();
 
     const std::vector<Color>& get_pixels() const { return pixels; }
-    uint32_t get_width() const { return width; }
-    uint32_t get_height() const { return height; }
-    Channels get_channels() const { return channels; }
+    uint32_t get_width() const { return header.get_width(); }
+    uint32_t get_height() const { return header.get_height(); }
+    Channels get_channels() const { return header.get_channels(); }
+    Colorspace get_colorspace() const { return header.get_colorspace(); }
 };
 
 }

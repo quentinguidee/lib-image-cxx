@@ -38,6 +38,7 @@ private:
     Colorspace colorspace;
 
 public:
+    Header() {}
     Header(InputStream& in);
     Header(uint32_t width, uint32_t height, Channels channels, Colorspace colorspace);
 
