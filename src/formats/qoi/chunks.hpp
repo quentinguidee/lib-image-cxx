@@ -28,7 +28,7 @@ class Chunk
 class Header : public Chunk
 {
 public:
-    static const uint32_t MAGIC = 0x716F6966;
+    static const uint32_t MAGIC = 'qoif';
     static const uint8_t SIZE = 14;
 
 private:
