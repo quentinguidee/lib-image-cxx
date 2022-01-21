@@ -12,9 +12,8 @@ void QOI::Image::encode(OutputStream& out)
     Color previous_color;
     uint8_t run_count = 0;
 
-    for (long i = 0; i < pixels.size(); ++i)
+    for (const Color& current_color : pixels)
     {
-        const Color& current_color = pixels[i];
         if (current_color == previous_color)
         {
             ++run_count;
