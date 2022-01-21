@@ -93,7 +93,7 @@ void QOI::Image::decode(InputStream& in)
     while (i < size)
     {
         uint8_t tag_8 = in.peek_8();
-        uint8_t tag_2 = (tag_8 & 0xc0);
+        uint8_t tag_2 = tag_8 & 0xc0;
 
         if (tag_8 == Pixel::RGB_TAG || tag_8 == Pixel::RGBA_TAG)
         {
