@@ -129,46 +129,80 @@ bool QOI::Color::operator==(const Color& rhs) const
 }
 
 /*
- * PIXEL
+ * RGB
  */
 
-QOI::Pixel::Pixel(InputStream& in)
+QOI::RGB::RGB(InputStream& in)
 {
     decode(in);
 }
 
-QOI::Pixel::Pixel(const Color& color, Channels channels) :
-    channels(channels), color(color)
+QOI::RGB::RGB(const Color& color) :
+    color(color)
 {
 }
 
-void QOI::Pixel::encode(OutputStream& out)
+void QOI::RGB::encode(OutputStream& out)
 {
-    out.write_8(channels == Channels::RGB ? RGB_TAG : RGBA_TAG);
+    out.write_8(TAG);
     out.write_8(color.red);
     out.write_8(color.green);
     out.write_8(color.blue);
-    if (channels == Channels::RGBA)
-        out.write_8(color.alpha);
 }
 
-void QOI::Pixel::decode(InputStream& in)
+void QOI::RGB::decode(InputStream& in)
 {
-    channels = in.read_8() == RGB_TAG ? Channels::RGB : Channels::RGBA;
+    in.read_8();
     color.red = in.read_8();
     color.green = in.read_8();
     color.blue = in.read_8();
-    if (channels == Channels::RGBA)
-        color.alpha = in.read_8();
 }
 
-bool QOI::Pixel::operator==(const Pixel& rhs) const
+bool QOI::RGB::operator==(const RGB& rhs) const
+{
+    return color.red == rhs.color.red &&
+           color.green == rhs.color.green &&
+           color.blue == rhs.color.blue;
+}
+
+/*
+ * RGBA
+ */
+
+QOI::RGBA::RGBA(InputStream& in)
+{
+    decode(in);
+}
+
+QOI::RGBA::RGBA(const Color& color) :
+    color(color)
+{
+}
+
+void QOI::RGBA::encode(OutputStream& out)
+{
+    out.write_8(TAG);
+    out.write_8(color.red);
+    out.write_8(color.green);
+    out.write_8(color.blue);
+    out.write_8(color.alpha);
+}
+
+void QOI::RGBA::decode(InputStream& in)
+{
+    in.read_8();
+    color.red = in.read_8();
+    color.green = in.read_8();
+    color.blue = in.read_8();
+    color.alpha = in.read_8();
+}
+
+bool QOI::RGBA::operator==(const RGBA& rhs) const
 {
     return color.red == rhs.color.red &&
            color.green == rhs.color.green &&
            color.blue == rhs.color.blue &&
-           channels == rhs.channels &&
-           (channels == Channels::RGB || color.alpha == rhs.color.alpha);
+           color.alpha == rhs.color.alpha;
 }
 
 /*

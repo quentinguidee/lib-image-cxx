@@ -72,14 +72,12 @@ TEST(QOIFormatTest, Diff)
     }
 }
 
-TEST(QOIFormatTest, Pixel)
+TEST(QOIFormatTest, RGB)
 {
     QOI::BufferStream stream;
-    std::pair<QOI::Pixel, std::string> pixels[] = {
-        {{{0, 0, 0}, QOI::Channels::RGB}, "fe000000"},
-        {{{30, 40, 50}, QOI::Channels::RGB}, "fe1e2832"},
-        {{{0, 0, 0, 0}, QOI::Channels::RGBA}, "ff00000000"},
-        {{{255, 255, 255, 255}, QOI::Channels::RGBA}, "ffffffffff"},
+    std::pair<QOI::RGB, std::string> pixels[] = {
+        {{{0, 0, 0}}, "fe000000"},
+        {{{30, 40, 50}}, "fe1e2832"},
     };
 
     for (auto pixel : pixels)
@@ -89,8 +87,28 @@ TEST(QOIFormatTest, Pixel)
         EXPECT_EQ(stream.as_string(), pixel.second);
 
         // Decoding
-        QOI::Pixel new_pixel(stream);
-        EXPECT_EQ(new_pixel, pixel.first);
+        QOI::RGB new_rgb(stream);
+        EXPECT_EQ(new_rgb, pixel.first);
+    }
+}
+
+TEST(QOIFormatTest, RGBA)
+{
+    QOI::BufferStream stream;
+    std::pair<QOI::RGBA, std::string> pixels[] = {
+        {{{0, 0, 0, 0}}, "ff00000000"},
+        {{{255, 255, 255, 255}}, "ffffffffff"},
+    };
+
+    for (auto pixel : pixels)
+    {
+        // Encoding
+        pixel.first.encode(stream);
+        EXPECT_EQ(stream.as_string(), pixel.second);
+
+        // Decoding
+        QOI::RGBA new_rgba(stream);
+        EXPECT_EQ(new_rgba, pixel.first);
     }
 }
 

@@ -108,28 +108,46 @@ struct Color
     bool operator==(const Color& rhs) const;
 };
 
-class Pixel final : public Chunk
+class RGB final : public Chunk
 {
 public:
-    static constexpr uint8_t RGB_TAG = 0xfe;
-    static constexpr uint8_t RGBA_TAG = 0xff;
-    static constexpr uint8_t RGB_SIZE = 4;
-    static constexpr uint8_t RGBA_SIZE = 5;
+    static constexpr uint8_t TAG = 0xfe;
+    static constexpr uint8_t SIZE = 4;
 
 private:
-    Channels channels;
     Color color;
 
 public:
-    Pixel(InputStream& in);
-    Pixel(const Color& color, Channels channels);
+    RGB(InputStream& in);
+    RGB(const Color& color);
 
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
     const Color& get_color() const { return color; }
 
-    bool operator==(const Pixel& rhs) const;
+    bool operator==(const RGB& rhs) const;
+};
+
+class RGBA final : public Chunk
+{
+public:
+    static constexpr uint8_t TAG = 0xff;
+    static constexpr uint8_t SIZE = 5;
+
+private:
+    Color color;
+
+public:
+    RGBA(InputStream& in);
+    RGBA(const Color& color);
+
+    void encode(OutputStream& out) override;
+    void decode(InputStream& in) override;
+
+    const Color& get_color() const { return color; }
+
+    bool operator==(const RGBA& rhs) const;
 };
 
 class Luma final : public Chunk

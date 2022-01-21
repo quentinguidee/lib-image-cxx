@@ -59,12 +59,12 @@ void QOI::Image::encode(OutputStream& out)
                 }
                 else
                 {
-                    Pixel(current_color, Channels::RGB).encode(out);
+                    RGB(current_color).encode(out);
                 }
             }
             else
             {
-                Pixel(current_color, Channels::RGBA).encode(out);
+                RGBA(current_color).encode(out);
             }
             previously_seen_pixels[index] = current_color;
             previous_color = current_color;
@@ -95,12 +95,19 @@ void QOI::Image::decode(InputStream& in)
         uint8_t tag_8 = in.peek_8();
         uint8_t tag_2 = tag_8 & 0xc0;
 
-        if (tag_8 == Pixel::RGB_TAG || tag_8 == Pixel::RGBA_TAG)
+        if (tag_8 == RGB::TAG)
         {
-            previous_color = Pixel(in).get_color();
+            previous_color = RGB(in).get_color();
             previously_seen_pixels[previous_color.hash()] = previous_color;
             pixels.push_back(previous_color);
-            i += tag_8 == Pixel::RGB_TAG ? Pixel::RGB_SIZE : Pixel::RGBA_SIZE;
+            i += RGB::SIZE;
+        }
+        else if (tag_8 == RGBA::TAG)
+        {
+            previous_color = RGBA(in).get_color();
+            previously_seen_pixels[previous_color.hash()] = previous_color;
+            pixels.push_back(previous_color);
+            i += RGBA::SIZE;
         }
         else if (tag_2 == Index::TAG)
         {
