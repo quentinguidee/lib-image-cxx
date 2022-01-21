@@ -56,8 +56,8 @@ public:
 class Index final : public Chunk
 {
 public:
-    static const uint8_t TAG = 0x00;
-    static const uint8_t SIZE = 1;
+    static constexpr uint8_t TAG = 0x00;
+    static constexpr uint8_t SIZE = 1;
 
 private:
     uint8_t index;
@@ -77,8 +77,8 @@ public:
 class Diff final : public Chunk
 {
 public:
-    static const uint8_t TAG = 0x40;
-    static const uint8_t SIZE = 1;
+    static constexpr uint8_t TAG = 0x40;
+    static constexpr uint8_t SIZE = 1;
 
 private:
     uint8_t diff_red, diff_green, diff_blue;
@@ -111,10 +111,10 @@ struct Color
 class Pixel final : public Chunk
 {
 public:
-    static const uint8_t RGB_TAG = 0xfe;
-    static const uint8_t RGBA_TAG = 0xff;
-    static const uint8_t RGB_SIZE = 4;
-    static const uint8_t RGBA_SIZE = 5;
+    static constexpr uint8_t RGB_TAG = 0xfe;
+    static constexpr uint8_t RGBA_TAG = 0xff;
+    static constexpr uint8_t RGB_SIZE = 4;
+    static constexpr uint8_t RGBA_SIZE = 5;
 
 private:
     Channels channels;
@@ -135,8 +135,8 @@ public:
 class Luma final : public Chunk
 {
 public:
-    static const uint8_t TAG = 0x80;
-    static const uint8_t SIZE = 2;
+    static constexpr uint8_t TAG = 0x80;
+    static constexpr uint8_t SIZE = 2;
 
 private:
     uint8_t diff_green, diff_red_green, diff_blue_green;
@@ -158,8 +158,8 @@ public:
 class Run final : public Chunk
 {
 public:
-    static const uint8_t TAG = 0xc0;
-    static const uint8_t SIZE = 1;
+    static constexpr uint8_t TAG = 0xc0;
+    static constexpr uint8_t SIZE = 1;
 
 private:
     uint8_t run;
@@ -179,7 +179,7 @@ public:
 class Footer final : public Chunk
 {
 public:
-    static const uint8_t SIZE = 8;
+    static constexpr uint8_t SIZE = 8;
 
 public:
     Footer() {}
