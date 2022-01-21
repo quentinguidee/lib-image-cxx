@@ -25,7 +25,7 @@ class Chunk
     virtual void decode(InputStream& in) = 0;
 };
 
-class Header : public Chunk
+class Header final : public Chunk
 {
 public:
     static const uint32_t MAGIC = 'qoif';
@@ -53,7 +53,7 @@ public:
     bool operator==(const Header& rhs) const;
 };
 
-class Index : public Chunk
+class Index final : public Chunk
 {
 public:
     static const uint8_t TAG = 0x00;
@@ -74,7 +74,7 @@ public:
     bool operator==(const Index& rhs) const;
 };
 
-class Diff : public Chunk
+class Diff final : public Chunk
 {
 public:
     static const uint8_t TAG = 0x40;
@@ -108,7 +108,7 @@ struct Color
     bool operator==(const Color& rhs) const;
 };
 
-class Pixel : public Chunk
+class Pixel final : public Chunk
 {
 public:
     static const uint8_t RGB_TAG = 0xfe;
@@ -132,7 +132,7 @@ public:
     bool operator==(const Pixel& rhs) const;
 };
 
-class Luma : public Chunk
+class Luma final : public Chunk
 {
 public:
     static const uint8_t TAG = 0x80;
@@ -155,7 +155,7 @@ public:
     bool operator==(const Luma& rhs) const;
 };
 
-class Run : public Chunk
+class Run final : public Chunk
 {
 public:
     static const uint8_t TAG = 0xc0;
@@ -176,7 +176,7 @@ public:
     bool operator==(const Run& rhs) const;
 };
 
-class Footer : public Chunk
+class Footer final : public Chunk
 {
 public:
     static const uint8_t SIZE = 8;
