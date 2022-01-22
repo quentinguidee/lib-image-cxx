@@ -1,8 +1,10 @@
 set(HEADERS
+    chunks.hpp
     image.hpp
 )
 
 set(SOURCES
+    chunks.cpp
     image.cpp
 )
 

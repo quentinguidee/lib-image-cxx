@@ -1,4 +1,6 @@
 set(SOURCES
+    bmp_tests.cpp
+    common_tests.cpp
     qoi_tests.cpp
 )
 
@@ -7,6 +9,7 @@ add_executable(tests ${SOURCES})
 include_directories(../src)
 
 target_link_libraries(tests qoi)
+target_link_libraries(tests bmp)
 target_link_libraries(tests gtest_main)
 
 include(GoogleTest)

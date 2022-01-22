@@ -6,14 +6,13 @@
 #include <ostream>
 #include <string>
 
-namespace QOI {
-
 class InputStream
 {
 public:
     virtual uint8_t read_8() = 0;
     virtual uint8_t peek_8() = 0;
 
+    uint16_t read_16();
     uint32_t read_32();
 
     virtual long size() = 0;
@@ -23,6 +22,8 @@ class OutputStream
 {
 public:
     virtual void write_8(uint8_t value) = 0;
+
+    void write_16(uint16_t value);
     void write_32(uint32_t value);
 };
 
@@ -73,5 +74,3 @@ public:
 
     void write_8(uint8_t value) override;
 };
-
-}

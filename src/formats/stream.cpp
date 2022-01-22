@@ -6,7 +6,15 @@
 #include <ostream>
 #include <sstream>
 
-uint32_t QOI::InputStream::read_32()
+uint16_t InputStream::read_16()
+{
+    uint16_t value;
+    value |= read_8() << 8;
+    value |= read_8();
+    return value;
+}
+
+uint32_t InputStream::read_32()
 {
     uint32_t value = 0;
     value |= read_8() << 24;
@@ -16,7 +24,13 @@ uint32_t QOI::InputStream::read_32()
     return value;
 }
 
-void QOI::OutputStream::write_32(uint32_t value)
+void OutputStream::write_16(uint16_t value)
+{
+    write_8((value & 0xff00) >> 8);
+    write_8(value & 0x00ff);
+}
+
+void OutputStream::write_32(uint32_t value)
 {
     write_8((value & 0xff000000) >> 24);
     write_8((value & 0x00ff0000) >> 16);
@@ -24,19 +38,19 @@ void QOI::OutputStream::write_32(uint32_t value)
     write_8(value & 0x000000ff);
 }
 
-void QOI::BufferStream::write_8(uint8_t value)
+void BufferStream::write_8(uint8_t value)
 {
     queue.push_back(value);
 }
 
-uint8_t QOI::BufferStream::read_8()
+uint8_t BufferStream::read_8()
 {
     uint8_t value = queue.front();
     queue.pop_front();
     return value;
 }
 
-std::string QOI::BufferStream::as_string() const
+std::string BufferStream::as_string() const
 {
     std::stringstream s;
     for (auto it = queue.begin(); it != queue.end(); ++it)
@@ -44,13 +58,13 @@ std::string QOI::BufferStream::as_string() const
     return s.str();
 }
 
-QOI::InputFileStream::InputFileStream(const std::string& filename) :
+InputFileStream::InputFileStream(const std::string& filename) :
     input(std::ifstream(filename))
 {
     input.seekg(0, std::ios::beg);
 }
 
-long QOI::InputFileStream::size()
+long InputFileStream::size()
 {
     // TODO: Handle tellg error (if it returns -1).
 
@@ -63,12 +77,12 @@ long QOI::InputFileStream::size()
     return end - begin;
 }
 
-void QOI::OutputFileStream::write_8(uint8_t value)
+void OutputFileStream::write_8(uint8_t value)
 {
     output << value;
 }
 
-QOI::OutputFileStream::OutputFileStream(const std::string& filename) :
+OutputFileStream::OutputFileStream(const std::string& filename) :
     output(std::ofstream(filename))
 {
 }

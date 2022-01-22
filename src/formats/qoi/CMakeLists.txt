@@ -1,14 +1,16 @@
 set(HEADERS
+    ../color.hpp
+    ../stream.hpp
     chunks.hpp
     decode_exception.hpp
     image.hpp
-    stream.hpp
 )
 
 set(SOURCES
+    ../color.cpp
+    ../stream.cpp
     chunks.cpp
     image.cpp
-    stream.cpp
 )
 
 # find_package(SDL2 REQUIRED)

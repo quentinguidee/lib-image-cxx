@@ -3,7 +3,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "stream.hpp"
+#include "../color.hpp"
+#include "../stream.hpp"
 
 namespace QOI {
 
@@ -95,17 +96,6 @@ public:
     int8_t get_diff_blue() const { return diff_blue - 2; }
 
     bool operator==(const Diff& rhs) const;
-};
-
-struct Color
-{
-    uint8_t red, green, blue, alpha;
-
-    Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0, uint8_t alpha = 255);
-
-    uint8_t hash() const;
-
-    bool operator==(const Color& rhs) const;
 };
 
 class RGB final : public Chunk

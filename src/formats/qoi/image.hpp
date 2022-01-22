@@ -2,8 +2,8 @@
 
 #include <vector>
 
+#include "../stream.hpp"
 #include "chunks.hpp"
-#include "stream.hpp"
 
 namespace QOI {
 
