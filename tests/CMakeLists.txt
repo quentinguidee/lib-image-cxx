@@ -1,5 +1,3 @@
-enable_testing()
-
 set(SOURCES
     qoi_tests.cpp
 )
