@@ -6,8 +6,6 @@
 #include <ostream>
 #include <string>
 
-namespace QOI {
-
 class InputStream
 {
 public:
@@ -73,5 +71,3 @@ public:
 
     void write_8(uint8_t value) override;
 };
-
-}

@@ -9,7 +9,7 @@
 
 TEST(QOIFormatTest, Header)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::Header, std::string> headers[] = {
         {{32, 32, QOI::Channels::RGBA, QOI::Colorspace::SRGB}, "716f696600000020000000200400"},
         {{1, 4, QOI::Channels::RGB, QOI::Colorspace::LINEAR}, "716f696600000001000000040301"},
@@ -30,7 +30,7 @@ TEST(QOIFormatTest, Header)
 
 TEST(QOIFormatTest, Index)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::Index, std::string> indexes[] = {
         {{17}, "11"},
         {{0}, "00"},
@@ -52,7 +52,7 @@ TEST(QOIFormatTest, Index)
 
 TEST(QOIFormatTest, Diff)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::Diff, std::string> diffs[] = {
         {{0, -1, 0}, "66"},
         {{-2, -2, -2}, "40"},
@@ -74,7 +74,7 @@ TEST(QOIFormatTest, Diff)
 
 TEST(QOIFormatTest, RGB)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::RGB, std::string> pixels[] = {
         {{{0, 0, 0}}, "fe000000"},
         {{{30, 40, 50}}, "fe1e2832"},
@@ -94,7 +94,7 @@ TEST(QOIFormatTest, RGB)
 
 TEST(QOIFormatTest, RGBA)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::RGBA, std::string> pixels[] = {
         {{{0, 0, 0, 0}}, "ff00000000"},
         {{{255, 255, 255, 255}}, "ffffffffff"},
@@ -114,7 +114,7 @@ TEST(QOIFormatTest, RGBA)
 
 TEST(QOIFormatTest, Luma)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::Luma, std::string> lumas[] = {
         {{-32, -8, -8}, "8000"},
         {{-12, 2, 2}, "94aa"},
@@ -135,7 +135,7 @@ TEST(QOIFormatTest, Luma)
 
 TEST(QOIFormatTest, Run)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     std::pair<QOI::Run, std::string> runs[] = {
         {{1}, "c0"},
         {{21}, "d4"},
@@ -156,7 +156,7 @@ TEST(QOIFormatTest, Run)
 
 TEST(QOIFormatTest, Footer)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
     QOI::Footer footer;
 
     // Encoding
@@ -170,7 +170,7 @@ TEST(QOIFormatTest, Footer)
 
 TEST(QOIFormatTest, BufferStream)
 {
-    QOI::BufferStream stream;
+    BufferStream stream;
 
     stream.write_8(0);
     stream.write_8(12);
@@ -187,7 +187,7 @@ TEST(QOIFormatTest, BufferStream)
 
 TEST(QOIFormatTest, FileStream)
 {
-    QOI::OutputFileStream out("temp.qoi");
+    OutputFileStream out("temp.qoi");
 
     EXPECT_TRUE(out.is_open());
 
@@ -197,7 +197,7 @@ TEST(QOIFormatTest, FileStream)
 
     out.close();
 
-    QOI::InputFileStream in("temp.qoi");
+    InputFileStream in("temp.qoi");
 
     EXPECT_TRUE(in.is_open());
 
@@ -229,7 +229,7 @@ TEST(QOIFormatTest, Color)
 
 TEST(QOIFormatTest, QOIToImage)
 {
-    QOI::InputFileStream in("test_images/image_1.qoi");
+    InputFileStream in("test_images/image_1.qoi");
 
     ASSERT_TRUE(in.is_open());
 
@@ -241,7 +241,7 @@ TEST(QOIFormatTest, QOIToImage)
     EXPECT_EQ(image.get_pixels().size(), image.get_width() * image.get_height());
     EXPECT_EQ(image.get_channels(), QOI::Channels::RGBA);
 
-    QOI::OutputFileStream out("test_images/image_1_out.qoi");
+    OutputFileStream out("test_images/image_1_out.qoi");
 
     ASSERT_TRUE(out.is_open());
 
