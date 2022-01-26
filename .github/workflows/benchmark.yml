@@ -1,0 +1,16 @@
+name: Benchmark
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure
+      run: cmake -B ${{github.workspace}}/build
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build
+    - name: Run benchmarks
+      working-directory: ${{github.workspace}}/build/benchmarks
+      run: ./benchmarks
