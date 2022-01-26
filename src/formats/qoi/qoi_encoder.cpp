@@ -4,12 +4,11 @@
 
 void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
 {
-    // TODO: Dynamic Channels and Colorspace.
     Header header(
         image.width,
         image.height,
-        Channels::RGBA,
-        Colorspace::SRGB);
+        image.channels,
+        image.colorspace);
 
     header.encode(out);
 

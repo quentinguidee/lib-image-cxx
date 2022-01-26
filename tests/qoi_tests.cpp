@@ -13,9 +13,9 @@ TEST(QOIFormatTest, Header)
 {
     BufferStream stream;
     std::pair<QOI::Header, std::string> headers[] = {
-        {{32, 32, QOI::Channels::RGBA, QOI::Colorspace::SRGB}, "716f696600000020000000200400"},
-        {{1, 4, QOI::Channels::RGB, QOI::Colorspace::LINEAR}, "716f696600000001000000040301"},
-        {{1400, 6000, QOI::Channels::RGBA, QOI::Colorspace::SRGB}, "716f696600000578000017700400"},
+        {{32, 32, Channels::RGBA, Colorspace::SRGB}, "716f696600000020000000200400"},
+        {{1, 4, Channels::RGB, Colorspace::LINEAR}, "716f696600000001000000040301"},
+        {{1400, 6000, Channels::RGBA, Colorspace::SRGB}, "716f696600000578000017700400"},
     };
 
     for (auto header : headers)
@@ -195,7 +195,7 @@ TEST(QOIFormatTest, QOIToImage)
     EXPECT_EQ(image.width, 1920);
     EXPECT_EQ(image.height, 1139);
     EXPECT_EQ(image.pixels.size(), image.width * image.height);
-    // EXPECT_EQ(image.get_channels(), QOI::Channels::RGBA);
+    EXPECT_EQ(image.channels, Channels::RGBA);
 
     OutputFileStream out("test_images/image_1_out.qoi");
 

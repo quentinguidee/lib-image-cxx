@@ -4,21 +4,10 @@
 #include <vector>
 
 #include "pixel.hpp"
+#include "raw_image.hpp"
 #include "stream.hpp"
 
 namespace QOI {
-
-enum class Colorspace : uint8_t
-{
-    SRGB = 0,
-    LINEAR = 1,
-};
-
-enum class Channels : uint8_t
-{
-    RGB = 3,
-    RGBA = 4,
-};
 
 class Chunk
 {

@@ -21,8 +21,8 @@ void QOI::Header::encode(OutputStream& out)
     out.write_32(MAGIC);
     out.write_32(width);
     out.write_32(height);
-    out.write_8(static_cast<uint8_t>(channels));
-    out.write_8(static_cast<uint8_t>(colorspace));
+    out.write_8(channels == Channels::RGB ? 3 : 4);
+    out.write_8(colorspace == Colorspace::SRGB ? 0 : 1);
 }
 
 void QOI::Header::decode(InputStream& in)
@@ -30,8 +30,8 @@ void QOI::Header::decode(InputStream& in)
     uint32_t magic = in.read_32();
     width = in.read_32();
     height = in.read_32();
-    channels = static_cast<Channels>(in.read_8());
-    colorspace = static_cast<Colorspace>(in.read_8());
+    channels = in.read_8() == 3 ? Channels::RGB : Channels::RGBA;
+    colorspace = in.read_8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
 }
 
 bool QOI::Header::operator==(const Header& rhs) const

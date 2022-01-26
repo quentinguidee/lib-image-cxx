@@ -12,6 +12,8 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
 
     image.width = header.get_width();
     image.height = header.get_height();
+    image.channels = header.get_channels();
+    image.colorspace = header.get_colorspace();
 
     image.pixels.clear();
     image.pixels.reserve(header.get_width() * header.get_height());
