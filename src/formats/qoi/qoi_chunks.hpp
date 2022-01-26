@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "pixel.hpp"
 #include "stream.hpp"
 
 namespace QOI {
@@ -104,6 +105,7 @@ struct Color
     Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0, uint8_t alpha = 255);
 
     uint8_t hash() const;
+    Pixel to_pixel() const { return {red, green, blue, alpha}; }
 
     bool operator==(const Color& rhs) const;
 };

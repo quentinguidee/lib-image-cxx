@@ -1,8 +1,13 @@
 set(HEADERS
+    decoder.hpp
+    pixel.hpp
+    raw_image.hpp
     stream.hpp
 )
 
 set(SOURCES
+    pixel.cpp
+    raw_image.cpp
     stream.cpp
 )
 

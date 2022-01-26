@@ -4,7 +4,9 @@
 
 #include "gtest/gtest.h"
 #include "qoi_chunks.hpp"
-#include "qoi_image.hpp"
+#include "qoi_decoder.hpp"
+#include "qoi_encoder.hpp"
+#include "raw_image.hpp"
 #include "stream.hpp"
 
 TEST(QOIFormatTest, Header)
@@ -187,19 +189,19 @@ TEST(QOIFormatTest, QOIToImage)
 
     ASSERT_TRUE(in.is_open());
 
-    QOI::Image image;
-    image.decode(in);
+    RawImage image = RawImage();
+    image.decode(QOI::Decoder(), in);
 
-    EXPECT_EQ(image.get_width(), 1920);
-    EXPECT_EQ(image.get_height(), 1139);
-    EXPECT_EQ(image.get_pixels().size(), image.get_width() * image.get_height());
-    EXPECT_EQ(image.get_channels(), QOI::Channels::RGBA);
+    EXPECT_EQ(image.width, 1920);
+    EXPECT_EQ(image.height, 1139);
+    EXPECT_EQ(image.pixels.size(), image.width * image.height);
+    // EXPECT_EQ(image.get_channels(), QOI::Channels::RGBA);
 
     OutputFileStream out("test_images/image_1_out.qoi");
 
     ASSERT_TRUE(out.is_open());
 
-    image.encode(out);
+    image.encode(QOI::Encoder(), out);
 
     out.close();
 

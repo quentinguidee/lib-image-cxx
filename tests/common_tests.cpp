@@ -3,8 +3,6 @@
 #include <utility>
 
 #include "gtest/gtest.h"
-#include "qoi_chunks.hpp"
-#include "qoi_image.hpp"
 #include "stream.hpp"
 
 TEST(CommonTest, BufferStream)

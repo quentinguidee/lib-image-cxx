@@ -1,12 +1,14 @@
 set(HEADERS
     qoi_chunks.hpp
     qoi_decode_exception.hpp
-    qoi_image.hpp
+    qoi_decoder.hpp
+    qoi_encoder.hpp
 )
 
 set(SOURCES
     qoi_chunks.cpp
-    qoi_image.cpp
+    qoi_decoder.cpp
+    qoi_encoder.cpp
 )
 
 # find_package(SDL2 REQUIRED)
