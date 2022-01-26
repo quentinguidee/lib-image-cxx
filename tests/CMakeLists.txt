@@ -1,4 +1,5 @@
 set(SOURCES
+    common_tests.cpp
     qoi_tests.cpp
 )
 
