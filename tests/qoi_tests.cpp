@@ -2,10 +2,10 @@
 #include <fstream>
 #include <utility>
 
-#include "formats/qoi/chunks.hpp"
-#include "formats/qoi/image.hpp"
-#include "formats/qoi/stream.hpp"
 #include "gtest/gtest.h"
+#include "qoi_chunks.hpp"
+#include "qoi_image.hpp"
+#include "stream.hpp"
 
 TEST(QOIFormatTest, Header)
 {

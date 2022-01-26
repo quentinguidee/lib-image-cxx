@@ -4,10 +4,11 @@ set(SOURCES
 
 add_executable(tests ${SOURCES})
 
-include_directories(../src)
-
-target_link_libraries(tests qoi)
-target_link_libraries(tests gtest_main)
+target_link_libraries(tests
+    common
+    qoi
+    gtest_main
+)
 
 include(GoogleTest)
 gtest_discover_tests(tests)

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "chunks.hpp"
+#include "qoi_chunks.hpp"
 #include "stream.hpp"
 
 namespace QOI {

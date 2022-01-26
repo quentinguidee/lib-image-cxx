@@ -1,8 +1,8 @@
-#include "image.hpp"
+#include "qoi_image.hpp"
 
 // #include "SDL.h"
-#include "chunks.hpp"
-#include "decode_exception.hpp"
+#include "qoi_chunks.hpp"
+#include "qoi_decode_exception.hpp"
 
 void QOI::Image::encode(OutputStream& out)
 {

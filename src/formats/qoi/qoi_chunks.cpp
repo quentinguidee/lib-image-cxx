@@ -1,6 +1,6 @@
-#include "chunks.hpp"
+#include "qoi_chunks.hpp"
 
-#include "decode_exception.hpp"
+#include "qoi_decode_exception.hpp"
 
 /*
  * HEADER
