@@ -41,11 +41,11 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
             {
                 Index(index).encode(out);
             }
-            else if (current_color.alpha == previous_color.alpha)
+            else if (current_color.a == previous_color.a)
             {
-                int8_t diff_red = current_color.red - previous_color.red;
-                int8_t diff_green = current_color.green - previous_color.green;
-                int8_t diff_blue = current_color.blue - previous_color.blue;
+                int8_t diff_red = current_color.r - previous_color.r;
+                int8_t diff_green = current_color.g - previous_color.g;
+                int8_t diff_blue = current_color.b - previous_color.b;
 
                 int8_t diff_red_green = diff_red - diff_green;
                 int8_t diff_blue_green = diff_blue - diff_green;

@@ -174,13 +174,13 @@ TEST(QOIFormatTest, Color)
 {
     QOI::Color color{255, 1, 99, 255};
 
-    color.red += 1;
-    color.green -= 2;
-    color.blue += 101;
+    color.r += 1;
+    color.g -= 2;
+    color.b += 101;
 
-    EXPECT_EQ(color.red, 0);
-    EXPECT_EQ(color.green, 255);
-    EXPECT_EQ(color.blue, 200);
+    EXPECT_EQ(color.r, 0);
+    EXPECT_EQ(color.g, 255);
+    EXPECT_EQ(color.b, 200);
 }
 
 TEST(QOIFormatTest, QOIToImage)

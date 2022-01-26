@@ -110,22 +110,22 @@ bool QOI::Diff::operator==(const Diff& rhs) const
  * COLOR
  */
 
-QOI::Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) :
-    red(red), green(green), blue(blue), alpha(alpha)
+QOI::Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) :
+    r(r), g(g), b(b), a(a)
 {
 }
 
 uint8_t QOI::Color::hash() const
 {
-    return (red * 3 + green * 5 + blue * 7 + alpha * 11) % 64;
+    return (r * 3 + g * 5 + b * 7 + a * 11) % 64;
 }
 
 bool QOI::Color::operator==(const Color& rhs) const
 {
-    return red == rhs.red &&
-           green == rhs.green &&
-           blue == rhs.blue &&
-           alpha == rhs.alpha;
+    return r == rhs.r &&
+           g == rhs.g &&
+           b == rhs.b &&
+           a == rhs.a;
 }
 
 /*
@@ -145,24 +145,24 @@ QOI::RGB::RGB(const Color& color) :
 void QOI::RGB::encode(OutputStream& out)
 {
     out.write_8(TAG);
-    out.write_8(color.red);
-    out.write_8(color.green);
-    out.write_8(color.blue);
+    out.write_8(color.r);
+    out.write_8(color.g);
+    out.write_8(color.b);
 }
 
 void QOI::RGB::decode(InputStream& in)
 {
     in.read_8();
-    color.red = in.read_8();
-    color.green = in.read_8();
-    color.blue = in.read_8();
+    color.r = in.read_8();
+    color.g = in.read_8();
+    color.b = in.read_8();
 }
 
 bool QOI::RGB::operator==(const RGB& rhs) const
 {
-    return color.red == rhs.color.red &&
-           color.green == rhs.color.green &&
-           color.blue == rhs.color.blue;
+    return color.r == rhs.color.r &&
+           color.g == rhs.color.g &&
+           color.b == rhs.color.b;
 }
 
 /*
@@ -182,27 +182,27 @@ QOI::RGBA::RGBA(const Color& color) :
 void QOI::RGBA::encode(OutputStream& out)
 {
     out.write_8(TAG);
-    out.write_8(color.red);
-    out.write_8(color.green);
-    out.write_8(color.blue);
-    out.write_8(color.alpha);
+    out.write_8(color.r);
+    out.write_8(color.g);
+    out.write_8(color.b);
+    out.write_8(color.a);
 }
 
 void QOI::RGBA::decode(InputStream& in)
 {
     in.read_8();
-    color.red = in.read_8();
-    color.green = in.read_8();
-    color.blue = in.read_8();
-    color.alpha = in.read_8();
+    color.r = in.read_8();
+    color.g = in.read_8();
+    color.b = in.read_8();
+    color.a = in.read_8();
 }
 
 bool QOI::RGBA::operator==(const RGBA& rhs) const
 {
-    return color.red == rhs.color.red &&
-           color.green == rhs.color.green &&
-           color.blue == rhs.color.blue &&
-           color.alpha == rhs.color.alpha;
+    return color.r == rhs.color.r &&
+           color.g == rhs.color.g &&
+           color.b == rhs.color.b &&
+           color.a == rhs.color.a;
 }
 
 /*

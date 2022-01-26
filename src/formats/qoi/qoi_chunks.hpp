@@ -89,12 +89,12 @@ public:
 
 struct Color
 {
-    uint8_t red, green, blue, alpha;
+    uint8_t r, g, b, a;
 
-    Color(uint8_t red = 0, uint8_t green = 0, uint8_t blue = 0, uint8_t alpha = 255);
+    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 255);
 
     uint8_t hash() const;
-    Pixel to_pixel() const { return {red, green, blue, alpha}; }
+    Pixel to_pixel() const { return {r, g, b, a}; }
 
     bool operator==(const Color& rhs) const;
 };

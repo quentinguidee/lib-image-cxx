@@ -52,9 +52,9 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
         {
             Diff diff(in);
 
-            previous_color.red += diff.get_diff_red();
-            previous_color.green += diff.get_diff_green();
-            previous_color.blue += diff.get_diff_blue();
+            previous_color.r += diff.get_diff_red();
+            previous_color.g += diff.get_diff_green();
+            previous_color.b += diff.get_diff_blue();
 
             previously_seen_pixels[previous_color.hash()] = previous_color;
             image.pixels.push_back(previous_color.to_pixel());
@@ -64,9 +64,9 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
         {
             Luma luma(in);
 
-            previous_color.red += luma.get_diff_green() + luma.get_diff_red_green();
-            previous_color.green += luma.get_diff_green();
-            previous_color.blue += luma.get_diff_green() + luma.get_diff_blue_green();
+            previous_color.r += luma.get_diff_green() + luma.get_diff_red_green();
+            previous_color.g += luma.get_diff_green();
+            previous_color.b += luma.get_diff_green() + luma.get_diff_blue_green();
 
             previously_seen_pixels[previous_color.hash()] = previous_color;
             image.pixels.push_back(previous_color.to_pixel());
