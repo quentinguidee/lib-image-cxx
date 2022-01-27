@@ -1,6 +1,5 @@
 #pragma once
 
-#include "decoder.hpp"
 #include "qoi_chunks.hpp"
 #include "raw_image.hpp"
 #include "stream.hpp"
