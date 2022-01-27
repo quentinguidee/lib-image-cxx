@@ -1,5 +1,6 @@
 #include "qoi_encoder.hpp"
 
+#include "pixel.hpp"
 #include "qoi_chunks.hpp"
 
 void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
@@ -12,14 +13,13 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
 
     header.encode(out);
 
-    Color previously_seen_pixels[64];
-    Color previous_color;
+    Pixel previously_seen_pixels[64];
+    Pixel previous_pixel;
     uint8_t run_count = 0;
 
     for (const Pixel &current_pixel : image.pixels)
     {
-        Color current_color(current_pixel.r, current_pixel.g, current_pixel.b, current_pixel.a);
-        if (current_color == previous_color)
+        if (current_pixel == previous_pixel)
         {
             ++run_count;
             if (run_count == 62)
@@ -36,16 +36,16 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
                 run_count = 0;
             }
 
-            uint8_t index = current_color.hash();
-            if (previously_seen_pixels[index] == current_color)
+            uint8_t index = hash_pixel(current_pixel);
+            if (previously_seen_pixels[index] == current_pixel)
             {
                 Index(index).encode(out);
             }
-            else if (current_color.a == previous_color.a)
+            else if (current_pixel.a == previous_pixel.a)
             {
-                int8_t diff_red = current_color.r - previous_color.r;
-                int8_t diff_green = current_color.g - previous_color.g;
-                int8_t diff_blue = current_color.b - previous_color.b;
+                int8_t diff_red = current_pixel.r - previous_pixel.r;
+                int8_t diff_green = current_pixel.g - previous_pixel.g;
+                int8_t diff_blue = current_pixel.b - previous_pixel.b;
 
                 int8_t diff_red_green = diff_red - diff_green;
                 int8_t diff_blue_green = diff_blue - diff_green;
@@ -64,15 +64,15 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
                 }
                 else
                 {
-                    RGB(current_color).encode(out);
+                    RGB(current_pixel).encode(out);
                 }
             }
             else
             {
-                RGBA(current_color).encode(out);
+                RGBA(current_pixel).encode(out);
             }
-            previously_seen_pixels[index] = current_color;
-            previous_color = current_color;
+            previously_seen_pixels[index] = current_pixel;
+            previous_pixel = current_pixel;
         }
     }
 

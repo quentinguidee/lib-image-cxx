@@ -1,6 +1,12 @@
 #include "qoi_chunks.hpp"
 
+#include "pixel.hpp"
 #include "qoi_decode_exception.hpp"
+
+uint8_t QOI::hash_pixel(const Pixel& pixel)
+{
+    return (pixel.r * 3 + pixel.g * 5 + pixel.b * 7 + pixel.a * 11) % 64;
+}
 
 /*
  * HEADER
@@ -99,11 +105,11 @@ void QOI::Diff::decode(InputStream& in)
     diff_blue = value & 0x03;
 }
 
-void QOI::Diff::apply_to(Color& color) const
+void QOI::Diff::apply_to(Pixel& pixel) const
 {
-    color.r += diff_red - 2;
-    color.g += diff_green - 2;
-    color.b += diff_blue - 2;
+    pixel.r += diff_red - 2;
+    pixel.g += diff_green - 2;
+    pixel.b += diff_blue - 2;
 }
 
 bool QOI::Diff::operator==(const Diff& rhs) const
@@ -111,28 +117,6 @@ bool QOI::Diff::operator==(const Diff& rhs) const
     return diff_red == rhs.diff_red &&
            diff_green == rhs.diff_green &&
            diff_blue == rhs.diff_blue;
-}
-
-/*
- * COLOR
- */
-
-QOI::Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a) :
-    r(r), g(g), b(b), a(a)
-{
-}
-
-uint8_t QOI::Color::hash() const
-{
-    return (r * 3 + g * 5 + b * 7 + a * 11) % 64;
-}
-
-bool QOI::Color::operator==(const Color& rhs) const
-{
-    return r == rhs.r &&
-           g == rhs.g &&
-           b == rhs.b &&
-           a == rhs.a;
 }
 
 /*
@@ -144,32 +128,32 @@ QOI::RGB::RGB(InputStream& in)
     decode(in);
 }
 
-QOI::RGB::RGB(const Color& color) :
-    color(color)
+QOI::RGB::RGB(const Pixel& pixel) :
+    pixel(pixel)
 {
 }
 
 void QOI::RGB::encode(OutputStream& out)
 {
     out.write_8(TAG);
-    out.write_8(color.r);
-    out.write_8(color.g);
-    out.write_8(color.b);
+    out.write_8(pixel.r);
+    out.write_8(pixel.g);
+    out.write_8(pixel.b);
 }
 
 void QOI::RGB::decode(InputStream& in)
 {
     in.read_8();
-    color.r = in.read_8();
-    color.g = in.read_8();
-    color.b = in.read_8();
+    pixel.r = in.read_8();
+    pixel.g = in.read_8();
+    pixel.b = in.read_8();
 }
 
 bool QOI::RGB::operator==(const RGB& rhs) const
 {
-    return color.r == rhs.color.r &&
-           color.g == rhs.color.g &&
-           color.b == rhs.color.b;
+    return pixel.r == rhs.pixel.r &&
+           pixel.g == rhs.pixel.g &&
+           pixel.b == rhs.pixel.b;
 }
 
 /*
@@ -181,35 +165,35 @@ QOI::RGBA::RGBA(InputStream& in)
     decode(in);
 }
 
-QOI::RGBA::RGBA(const Color& color) :
-    color(color)
+QOI::RGBA::RGBA(const Pixel& pixel) :
+    pixel(pixel)
 {
 }
 
 void QOI::RGBA::encode(OutputStream& out)
 {
     out.write_8(TAG);
-    out.write_8(color.r);
-    out.write_8(color.g);
-    out.write_8(color.b);
-    out.write_8(color.a);
+    out.write_8(pixel.r);
+    out.write_8(pixel.g);
+    out.write_8(pixel.b);
+    out.write_8(pixel.a);
 }
 
 void QOI::RGBA::decode(InputStream& in)
 {
     in.read_8();
-    color.r = in.read_8();
-    color.g = in.read_8();
-    color.b = in.read_8();
-    color.a = in.read_8();
+    pixel.r = in.read_8();
+    pixel.g = in.read_8();
+    pixel.b = in.read_8();
+    pixel.a = in.read_8();
 }
 
 bool QOI::RGBA::operator==(const RGBA& rhs) const
 {
-    return color.r == rhs.color.r &&
-           color.g == rhs.color.g &&
-           color.b == rhs.color.b &&
-           color.a == rhs.color.a;
+    return pixel.r == rhs.pixel.r &&
+           pixel.g == rhs.pixel.g &&
+           pixel.b == rhs.pixel.b &&
+           pixel.a == rhs.pixel.a;
 }
 
 /*
@@ -242,11 +226,11 @@ void QOI::Luma::decode(InputStream& in)
     diff_blue_green = value & 0x0f;
 }
 
-void QOI::Luma::apply_to(Color& color) const
+void QOI::Luma::apply_to(Pixel& pixel) const
 {
-    color.r += (diff_green - 32) + (diff_red_green - 8);
-    color.g += (diff_green - 32);
-    color.b += (diff_green - 32) + (diff_blue_green - 8);
+    pixel.r += (diff_green - 32) + (diff_red_green - 8);
+    pixel.g += (diff_green - 32);
+    pixel.b += (diff_green - 32) + (diff_blue_green - 8);
 }
 
 bool QOI::Luma::operator==(const Luma& rhs) const

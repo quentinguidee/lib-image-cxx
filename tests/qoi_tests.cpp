@@ -170,19 +170,6 @@ TEST(QOIFormatTest, Footer)
     EXPECT_EQ(new_footer, QOI::Footer());
 }
 
-TEST(QOIFormatTest, Color)
-{
-    QOI::Color color{255, 1, 99, 255};
-
-    color.r += 1;
-    color.g -= 2;
-    color.b += 101;
-
-    EXPECT_EQ(color.r, 0);
-    EXPECT_EQ(color.g, 255);
-    EXPECT_EQ(color.b, 200);
-}
-
 TEST(QOIFormatTest, QOIToImage)
 {
     InputFileStream in("test_images/image_1.qoi");

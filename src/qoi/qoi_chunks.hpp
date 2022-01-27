@@ -9,17 +9,7 @@
 
 namespace QOI {
 
-struct Color
-{
-    uint8_t r, g, b, a;
-
-    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 255);
-
-    uint8_t hash() const;
-    Pixel to_pixel() const { return {r, g, b, a}; }
-
-    bool operator==(const Color& rhs) const;
-};
+uint8_t hash_pixel(const Pixel& pixel);
 
 class Chunk
 {
@@ -92,7 +82,7 @@ public:
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
-    void apply_to(Color& color) const;
+    void apply_to(Pixel& pixel) const;
 
     int8_t get_diff_red() const { return diff_red - 2; }
     int8_t get_diff_green() const { return diff_green - 2; }
@@ -108,16 +98,16 @@ public:
     static constexpr uint8_t SIZE = 4;
 
 private:
-    Color color;
+    Pixel pixel;
 
 public:
     RGB(InputStream& in);
-    RGB(const Color& color);
+    RGB(const Pixel& pixel);
 
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
-    const Color& get_color() const { return color; }
+    const Pixel& get_pixel() const { return pixel; }
 
     bool operator==(const RGB& rhs) const;
 };
@@ -129,16 +119,16 @@ public:
     static constexpr uint8_t SIZE = 5;
 
 private:
-    Color color;
+    Pixel pixel;
 
 public:
     RGBA(InputStream& in);
-    RGBA(const Color& color);
+    RGBA(const Pixel& pixel);
 
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
-    const Color& get_color() const { return color; }
+    const Pixel& get_pixel() const { return pixel; }
 
     bool operator==(const RGBA& rhs) const;
 };
@@ -159,7 +149,7 @@ public:
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
-    void apply_to(Color& color) const;
+    void apply_to(Pixel& pixel) const;
 
     int8_t get_diff_green() const { return diff_green - 32; }
     int8_t get_diff_red_green() const { return diff_red_green - 8; }

@@ -1,5 +1,6 @@
 #include "qoi_decoder.hpp"
 
+#include "pixel.hpp"
 #include "qoi_chunks.hpp"
 #include "qoi_decode_exception.hpp"
 #include "stream.hpp"
@@ -16,8 +17,8 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
     image.pixels.clear();
     image.pixels.reserve(header.get_width() * header.get_height());
 
-    Color previously_seen_pixels[64];
-    Color previous_color;
+    Pixel previously_seen_pixels[64];
+    Pixel pixel;
 
     uint8_t run = 0;
     long image_size = image.width * image.height;
@@ -29,21 +30,21 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
         if (run > 0)
             --run;
         else if (tag_8 == RGB::TAG)
-            previous_color = RGB(in).get_color();
+            pixel = RGB(in).get_pixel();
         else if (tag_8 == RGBA::TAG)
-            previous_color = RGBA(in).get_color();
+            pixel = RGBA(in).get_pixel();
         else if (tag_2 == Index::TAG)
-            previous_color = previously_seen_pixels[Index(in).get_index()];
+            pixel = previously_seen_pixels[Index(in).get_index()];
         else if (tag_2 == Diff::TAG)
-            Diff(in).apply_to(previous_color);
+            Diff(in).apply_to(pixel);
         else if (tag_2 == Luma::TAG)
-            Luma(in).apply_to(previous_color);
+            Luma(in).apply_to(pixel);
         else if (tag_2 == Run::TAG)
             run = Run(in).get_run() - 1;
         else
             throw DecodeException("Tag not recognized.");
 
-        previously_seen_pixels[previous_color.hash()] = previous_color;
-        image.pixels.push_back(previous_color.to_pixel());
+        previously_seen_pixels[hash_pixel(pixel)] = pixel;
+        image.pixels.push_back(pixel);
     }
 }
