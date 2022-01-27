@@ -18,7 +18,7 @@ class Chunk
 class Header final : public Chunk
 {
 public:
-    static constexpr uint32_t MAGIC = 'qoif';
+    static constexpr uint32_t MAGIC = 0x716f6966;
     static constexpr uint8_t SIZE = 14;
 
 private:
