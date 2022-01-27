@@ -9,6 +9,18 @@
 
 namespace QOI {
 
+struct Color
+{
+    uint8_t r, g, b, a;
+
+    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 255);
+
+    uint8_t hash() const;
+    Pixel to_pixel() const { return {r, g, b, a}; }
+
+    bool operator==(const Color& rhs) const;
+};
+
 class Chunk
 {
     virtual void encode(OutputStream& out) = 0;
@@ -80,23 +92,13 @@ public:
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
+    void apply_to(Color& color) const;
+
     int8_t get_diff_red() const { return diff_red - 2; }
     int8_t get_diff_green() const { return diff_green - 2; }
     int8_t get_diff_blue() const { return diff_blue - 2; }
 
     bool operator==(const Diff& rhs) const;
-};
-
-struct Color
-{
-    uint8_t r, g, b, a;
-
-    Color(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0, uint8_t a = 255);
-
-    uint8_t hash() const;
-    Pixel to_pixel() const { return {r, g, b, a}; }
-
-    bool operator==(const Color& rhs) const;
 };
 
 class RGB final : public Chunk
@@ -156,6 +158,8 @@ public:
 
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
+
+    void apply_to(Color& color) const;
 
     int8_t get_diff_green() const { return diff_green - 32; }
     int8_t get_diff_red_green() const { return diff_red_green - 8; }

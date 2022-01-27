@@ -99,6 +99,13 @@ void QOI::Diff::decode(InputStream& in)
     diff_blue = value & 0x03;
 }
 
+void QOI::Diff::apply_to(Color& color) const
+{
+    color.r += diff_red - 2;
+    color.g += diff_green - 2;
+    color.b += diff_blue - 2;
+}
+
 bool QOI::Diff::operator==(const Diff& rhs) const
 {
     return diff_red == rhs.diff_red &&
@@ -233,6 +240,13 @@ void QOI::Luma::decode(InputStream& in)
     value = in.read_8();
     diff_red_green = (value & 0xf0) >> 4;
     diff_blue_green = value & 0x0f;
+}
+
+void QOI::Luma::apply_to(Color& color) const
+{
+    color.r += (diff_green - 32) + (diff_red_green - 8);
+    color.g += (diff_green - 32);
+    color.b += (diff_green - 32) + (diff_blue_green - 8);
 }
 
 bool QOI::Luma::operator==(const Luma& rhs) const
