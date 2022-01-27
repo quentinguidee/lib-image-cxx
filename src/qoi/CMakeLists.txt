@@ -1,6 +1,5 @@
 set(HEADERS
     qoi_chunks.hpp
-    qoi_decode_exception.hpp
     qoi_decoder.hpp
     qoi_encoder.hpp
 )

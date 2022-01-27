@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <vector>
 
 #include "pixel.hpp"
 #include "raw_image.hpp"

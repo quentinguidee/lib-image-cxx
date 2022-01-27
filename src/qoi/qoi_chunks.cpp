@@ -1,7 +1,6 @@
 #include "qoi_chunks.hpp"
 
 #include "pixel.hpp"
-#include "qoi_decode_exception.hpp"
 
 uint8_t QOI::hash_pixel(const Pixel& pixel)
 {

@@ -1,9 +1,8 @@
 #include "qoi_decoder.hpp"
 
+#include "exceptions.hpp"
 #include "pixel.hpp"
 #include "qoi_chunks.hpp"
-#include "qoi_decode_exception.hpp"
-#include "stream.hpp"
 
 void QOI::Decoder::decode(InputStream &in, RawImage &image) const
 {

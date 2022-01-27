@@ -3,8 +3,6 @@
 #include <exception>
 #include <string>
 
-namespace QOI {
-
 class DecodeException : public std::exception
 {
 private:
@@ -26,5 +24,3 @@ public:
         return error_message;
     }
 };
-
-}
