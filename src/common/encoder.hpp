@@ -3,7 +3,7 @@
 #include "pixel.hpp"
 #include "stream.hpp"
 
-class RawImage;
+struct RawImage;
 
 class BaseEncoder
 {

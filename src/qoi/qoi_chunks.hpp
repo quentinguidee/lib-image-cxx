@@ -197,7 +197,7 @@ public:
     void encode(OutputStream& out) override;
     void decode(InputStream& in) override;
 
-    bool operator==(const Footer& rhs) const { return true; }
+    bool operator==([[maybe_unused]] const Footer& rhs) const { return true; }
 };
 
 }

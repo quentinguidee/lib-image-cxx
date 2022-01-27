@@ -27,7 +27,7 @@ void QOI::Header::encode(OutputStream& out)
 
 void QOI::Header::decode(InputStream& in)
 {
-    uint32_t magic = in.read_32();
+    in.read_32();
     width = in.read_32();
     height = in.read_32();
     channels = in.read_8() == 3 ? Channels::RGB : Channels::RGBA;
@@ -286,7 +286,7 @@ void QOI::Footer::encode(OutputStream& out)
     out.write_32(0x00000001);
 }
 
-void QOI::Footer::decode(InputStream& in)
+void QOI::Footer::decode([[maybe_unused]] InputStream& in)
 {
     // Nothing to do.
     // The footer is always the same.
