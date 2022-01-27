@@ -8,6 +8,7 @@ namespace QOI {
 
 class Decoder final : public BaseDecoder
 {
+public:
     void decode(InputStream &in, RawImage &image) const override;
 };
 
