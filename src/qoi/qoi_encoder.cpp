@@ -15,25 +15,25 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
 
     Pixel previously_seen_pixels[64];
     Pixel previous_pixel;
-    uint8_t run_count = 0;
+    uint8_t run = 0;
 
     for (const Pixel &current_pixel : image.pixels)
     {
         if (current_pixel == previous_pixel)
         {
-            ++run_count;
-            if (run_count == 62)
+            ++run;
+            if (run == 62)
             {
-                Run(run_count).encode(out);
-                run_count = 0;
+                Run(run).encode(out);
+                run = 0;
             }
         }
         else
         {
-            if (run_count != 0)
+            if (run != 0)
             {
-                Run(run_count).encode(out);
-                run_count = 0;
+                Run(run).encode(out);
+                run = 0;
             }
 
             uint8_t index = hash_pixel(current_pixel);
@@ -76,8 +76,8 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
         }
     }
 
-    if (run_count != 0)
-        Run(run_count).encode(out);
+    if (run != 0)
+        Run(run).encode(out);
 
     Footer().encode(out);
 }
