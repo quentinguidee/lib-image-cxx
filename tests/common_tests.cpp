@@ -80,5 +80,5 @@ TEST(CommonTest, FileStream)
 
     in.close();
 
-    remove("temp.qoi");
+    remove("temp");
 }
