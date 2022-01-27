@@ -24,20 +24,20 @@ QOI::Header::Header(uint32_t width, uint32_t height, Channels channels, Colorspa
 
 void QOI::Header::encode(OutputStream& out)
 {
-    out.write_32(MAGIC);
-    out.write_32(width);
-    out.write_32(height);
-    out.write_8(channels == Channels::RGB ? 3 : 4);
-    out.write_8(colorspace == Colorspace::SRGB ? 0 : 1);
+    out.write_u32(MAGIC);
+    out.write_u32(width);
+    out.write_u32(height);
+    out.write_u8(channels == Channels::RGB ? 3 : 4);
+    out.write_u8(colorspace == Colorspace::SRGB ? 0 : 1);
 }
 
 void QOI::Header::decode(InputStream& in)
 {
-    in.read_32();
-    width = in.read_32();
-    height = in.read_32();
-    channels = in.read_8() == 3 ? Channels::RGB : Channels::RGBA;
-    colorspace = in.read_8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
+    in.read_u32();
+    width = in.read_u32();
+    height = in.read_u32();
+    channels = in.read_u8() == 3 ? Channels::RGB : Channels::RGBA;
+    colorspace = in.read_u8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
 }
 
 bool QOI::Header::operator==(const Header& rhs) const
@@ -64,12 +64,12 @@ QOI::Index::Index(uint8_t index) :
 
 void QOI::Index::encode(OutputStream& out)
 {
-    out.write_8(TAG | index);
+    out.write_u8(TAG | index);
 }
 
 void QOI::Index::decode(InputStream& in)
 {
-    index = in.read_8();
+    index = in.read_u8();
 }
 
 bool QOI::Index::operator==(const Index& rhs) const
@@ -94,12 +94,12 @@ QOI::Diff::Diff(int8_t diff_red, int8_t diff_green, int8_t diff_blue) :
 void QOI::Diff::encode(OutputStream& out)
 {
     uint8_t value = diff_red << 4 | diff_green << 2 | diff_blue;
-    out.write_8(TAG | (value & 0x3f));
+    out.write_u8(TAG | (value & 0x3f));
 }
 
 void QOI::Diff::decode(InputStream& in)
 {
-    uint8_t value = in.read_8();
+    uint8_t value = in.read_u8();
     diff_red = (value & 0x30) >> 4;
     diff_green = (value & 0x0c) >> 2;
     diff_blue = value & 0x03;
@@ -135,18 +135,18 @@ QOI::RGB::RGB(const Pixel& pixel) :
 
 void QOI::RGB::encode(OutputStream& out)
 {
-    out.write_8(TAG);
-    out.write_8(pixel.r);
-    out.write_8(pixel.g);
-    out.write_8(pixel.b);
+    out.write_u8(TAG);
+    out.write_u8(pixel.r);
+    out.write_u8(pixel.g);
+    out.write_u8(pixel.b);
 }
 
 void QOI::RGB::decode(InputStream& in)
 {
-    in.read_8();
-    pixel.r = in.read_8();
-    pixel.g = in.read_8();
-    pixel.b = in.read_8();
+    in.read_u8();
+    pixel.r = in.read_u8();
+    pixel.g = in.read_u8();
+    pixel.b = in.read_u8();
 }
 
 bool QOI::RGB::operator==(const RGB& rhs) const
@@ -172,20 +172,20 @@ QOI::RGBA::RGBA(const Pixel& pixel) :
 
 void QOI::RGBA::encode(OutputStream& out)
 {
-    out.write_8(TAG);
-    out.write_8(pixel.r);
-    out.write_8(pixel.g);
-    out.write_8(pixel.b);
-    out.write_8(pixel.a);
+    out.write_u8(TAG);
+    out.write_u8(pixel.r);
+    out.write_u8(pixel.g);
+    out.write_u8(pixel.b);
+    out.write_u8(pixel.a);
 }
 
 void QOI::RGBA::decode(InputStream& in)
 {
-    in.read_8();
-    pixel.r = in.read_8();
-    pixel.g = in.read_8();
-    pixel.b = in.read_8();
-    pixel.a = in.read_8();
+    in.read_u8();
+    pixel.r = in.read_u8();
+    pixel.g = in.read_u8();
+    pixel.b = in.read_u8();
+    pixel.a = in.read_u8();
 }
 
 bool QOI::RGBA::operator==(const RGBA& rhs) const
@@ -212,16 +212,16 @@ QOI::Luma::Luma(int8_t diff_green, int8_t diff_red_green, int8_t diff_blue_green
 
 void QOI::Luma::encode(OutputStream& out)
 {
-    out.write_8(TAG | diff_green);
-    out.write_8(diff_red_green << 4 | diff_blue_green);
+    out.write_u8(TAG | diff_green);
+    out.write_u8(diff_red_green << 4 | diff_blue_green);
 }
 
 void QOI::Luma::decode(InputStream& in)
 {
-    uint8_t value = in.read_8();
+    uint8_t value = in.read_u8();
     diff_green = value & 0x3f;
 
-    value = in.read_8();
+    value = in.read_u8();
     diff_red_green = (value & 0xf0) >> 4;
     diff_blue_green = value & 0x0f;
 }
@@ -256,12 +256,12 @@ QOI::Run::Run(uint8_t run) :
 
 void QOI::Run::encode(OutputStream& out)
 {
-    out.write_8(TAG | run);
+    out.write_u8(TAG | run);
 }
 
 void QOI::Run::decode(InputStream& in)
 {
-    run = in.read_8() & 0x3f;
+    run = in.read_u8() & 0x3f;
 }
 
 bool QOI::Run::operator==(const Run& rhs) const
@@ -280,8 +280,8 @@ QOI::Footer::Footer(InputStream& in)
 
 void QOI::Footer::encode(OutputStream& out)
 {
-    out.write_32(0x00000000);
-    out.write_32(0x00000001);
+    out.write_u32(0x00000000);
+    out.write_u32(0x00000001);
 }
 
 void QOI::Footer::decode([[maybe_unused]] InputStream& in)

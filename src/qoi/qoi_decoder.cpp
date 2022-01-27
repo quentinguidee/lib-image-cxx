@@ -24,7 +24,7 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
     long image_size = image.width * image.height;
     for (long i = 0; i < image_size; ++i)
     {
-        uint8_t tag_8 = in.peek_8();
+        uint8_t tag_8 = in.peek_u8();
         uint8_t tag_2 = tag_8 & 0xc0;
 
         if (run > 0)

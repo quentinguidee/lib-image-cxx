@@ -6,32 +6,90 @@
 #include <ostream>
 #include <sstream>
 
-uint32_t InputStream::read_32()
+uint16_t InputStream::read_u16()
 {
-    uint32_t value = 0;
-    value |= read_8() << 24;
-    value |= read_8() << 16;
-    value |= read_8() << 8;
-    value |= read_8();
+    uint16_t value = 0;
+    value |= read_u8() << 8;
+    value |= read_u8();
     return value;
 }
 
-void OutputStream::write_32(uint32_t value)
+int16_t InputStream::read_i16()
 {
-    write_8((value & 0xff000000) >> 24);
-    write_8((value & 0x00ff0000) >> 16);
-    write_8((value & 0x0000ff00) >> 8);
-    write_8(value & 0x000000ff);
+    int16_t value = 0;
+    value |= read_u8() << 8;
+    value |= read_u8();
+    return value;
 }
 
-void BufferStream::write_8(uint8_t value)
+uint32_t InputStream::read_u32()
+{
+    uint32_t value = 0;
+    value |= read_u8() << 24;
+    value |= read_u8() << 16;
+    value |= read_u8() << 8;
+    value |= read_u8();
+    return value;
+}
+
+int32_t InputStream::read_i32()
+{
+    int32_t value = 0;
+    value |= read_u8() << 24;
+    value |= read_u8() << 16;
+    value |= read_u8() << 8;
+    value |= read_u8();
+    return value;
+}
+
+void OutputStream::write_u16(uint16_t value)
+{
+    write_u8((value & 0xff00) >> 8);
+    write_u8(value & 0x00ff);
+}
+
+void OutputStream::write_i16(int16_t value)
+{
+    write_i8((value & 0xff00) >> 8);
+    write_i8(value & 0x00ff);
+}
+
+void OutputStream::write_u32(uint32_t value)
+{
+    write_u8((value & 0xff000000) >> 24);
+    write_u8((value & 0x00ff0000) >> 16);
+    write_u8((value & 0x0000ff00) >> 8);
+    write_u8(value & 0x000000ff);
+}
+
+void OutputStream::write_i32(int32_t value)
+{
+    write_i8((value & 0xff000000) >> 24);
+    write_i8((value & 0x00ff0000) >> 16);
+    write_i8((value & 0x0000ff00) >> 8);
+    write_i8(value & 0x000000ff);
+}
+
+void BufferStream::write_u8(uint8_t value)
 {
     queue.push_back(value);
 }
 
-uint8_t BufferStream::read_8()
+void BufferStream::write_i8(int8_t value)
+{
+    queue.push_back(value);
+}
+
+uint8_t BufferStream::read_u8()
 {
     uint8_t value = queue.front();
+    queue.pop_front();
+    return value;
+}
+
+int8_t BufferStream::read_i8()
+{
+    int8_t value = queue.front();
     queue.pop_front();
     return value;
 }
@@ -63,7 +121,12 @@ long InputFileStream::size()
     return end - begin;
 }
 
-void OutputFileStream::write_8(uint8_t value)
+void OutputFileStream::write_u8(uint8_t value)
+{
+    output << value;
+}
+
+void OutputFileStream::write_i8(int8_t value)
 {
     output << value;
 }
