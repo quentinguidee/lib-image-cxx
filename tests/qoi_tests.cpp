@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 #include "qoi_decoder.hpp"
 #include "qoi_encoder.hpp"
+#include "qoi_format.hpp"
 #include "raw_image.hpp"
 #include "stream.hpp"
 
@@ -15,7 +16,7 @@ TEST(QOITest, QOIConversion)
     ASSERT_TRUE(in.is_open());
 
     RawImage image = RawImage();
-    image.decode(QOI::Decoder(), in);
+    image.decode(QOI_FORMAT, in);
 
     EXPECT_EQ(image.width, 1920);
     EXPECT_EQ(image.height, 1139);
@@ -26,7 +27,7 @@ TEST(QOITest, QOIConversion)
 
     ASSERT_TRUE(out.is_open());
 
-    image.encode(QOI::Encoder(), out);
+    image.encode(QOI_FORMAT, out);
 
     out.close();
 
