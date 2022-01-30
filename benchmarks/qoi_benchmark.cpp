@@ -1,6 +1,7 @@
 #include "benchmark/benchmark.h"
 #include "qoi_decoder.hpp"
 #include "qoi_encoder.hpp"
+#include "qoi_format.hpp"
 #include "raw_image.hpp"
 
 static void BM_QOI_decode(benchmark::State& state)
@@ -10,7 +11,7 @@ static void BM_QOI_decode(benchmark::State& state)
         InputFileStream in("../tests/test_images/image_1.qoi");
 
         RawImage image = RawImage();
-        image.decode(QOI::Decoder(), in);
+        image.decode(QOI_FORMAT, in);
     }
 }
 
@@ -21,12 +22,12 @@ static void BM_QOI_encode(benchmark::State& state)
     InputFileStream in("../tests/test_images/image_1.qoi");
 
     RawImage image = RawImage();
-    image.decode(QOI::Decoder(), in);
+    image.decode(QOI_FORMAT, in);
 
     for (auto _ : state)
     {
         OutputFileStream out("../tests/test_images/image_1_out.qoi");
-        image.encode(QOI::Encoder(), out);
+        image.encode(QOI_FORMAT, out);
         out.close();
     }
 }
