@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "app.hpp"
 
 #include <iostream>
 
@@ -6,7 +6,7 @@
 #include "qoi_decoder.hpp"
 #include "raw_image.hpp"
 
-Viewer::Window::Window() :
+Viewer::App::App() :
     menu_bar()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -47,7 +47,7 @@ Viewer::Window::Window() :
     image_widget.initialize();
 }
 
-Viewer::Window::~Window()
+Viewer::App::~App()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -58,7 +58,7 @@ Viewer::Window::~Window()
     SDL_Quit();
 }
 
-void Viewer::Window::run()
+void Viewer::App::run()
 {
     ImVec4 clear_color = ImVec4(0.08, 0.08, 0.13, 1);
 

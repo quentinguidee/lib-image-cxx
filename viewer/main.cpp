@@ -1,7 +1,7 @@
-#include "window.hpp"
+#include "app.hpp"
 
 int main()
 {
-    Viewer::Window().run();
+    Viewer::App().run();
     return 0;
 }

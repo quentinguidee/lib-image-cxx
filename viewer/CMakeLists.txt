@@ -1,14 +1,14 @@
 set(HEADERS
     image_widget.hpp
     menu_bar.hpp
-    window.hpp
+    app.hpp
 )
 
 set(SOURCES
     image_widget.cpp
     main.cpp
     menu_bar.cpp
-    window.cpp
+    app.cpp
 )
 
 # -- SDL2

@@ -9,7 +9,7 @@
 
 namespace Viewer {
 
-class Window
+class App
 {
 private:
     SDL_Window* window;
@@ -20,8 +20,8 @@ private:
     ImageWidget image_widget;
 
 public:
-    Window();
-    ~Window();
+    App();
+    ~App();
 
     void run();
 };
