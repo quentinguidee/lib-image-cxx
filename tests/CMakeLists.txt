@@ -6,8 +6,7 @@ set(SOURCES
 add_executable(tests ${SOURCES})
 
 target_link_libraries(tests
-    common
-    qoi
+    image
     gtest_main
 )
 

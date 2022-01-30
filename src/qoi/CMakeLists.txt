@@ -1,6 +1,7 @@
 set(HEADERS
     qoi_common.hpp
     qoi_decoder.hpp
+    qoi_definition.hpp
     qoi_encoder.hpp
 )
 
@@ -11,7 +12,5 @@ set(SOURCES
 )
 
 add_library(qoi ${HEADERS} ${SOURCES})
-
 target_include_directories(qoi PUBLIC ${CMAKE_CURRENT_LIST_DIR})
-
 target_link_libraries(qoi common)

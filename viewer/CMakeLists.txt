@@ -45,8 +45,7 @@ set(IMGUI_SOURCES
 add_executable(viewer ${IMGUI_SOURCES} ${HEADERS} ${SOURCES})
 find_package(OpenGL REQUIRED)
 target_link_libraries(viewer
-    common
-    qoi
+    image
     SDL2::SDL2
     ${OPENGL_gl_LIBRARY}
 )

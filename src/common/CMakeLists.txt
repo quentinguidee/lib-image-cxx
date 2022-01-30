@@ -1,8 +1,9 @@
 set(HEADERS
     channels.hpp
     colorspace.hpp
-    exceptions.hpp
     decoder.hpp
+    exceptions.hpp
+    format_definition.hpp
     pixel.hpp
     raw_image.hpp
     stream.hpp
