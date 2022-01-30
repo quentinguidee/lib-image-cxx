@@ -1,7 +1,7 @@
 set(HEADERS
     qoi_common.hpp
     qoi_decoder.hpp
-    qoi_definition.hpp
+    qoi_format.hpp
     qoi_encoder.hpp
 )
 

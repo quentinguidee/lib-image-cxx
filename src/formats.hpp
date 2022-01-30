@@ -1,9 +1,13 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
 
-#include "format_definition.hpp"
-#include "qoi_definition.hpp"
+#include "format.hpp"
+#include "qoi_format.hpp"
 
-static const std::vector<FormatDefinition> FORMATS{
-    QOI_FORMAT};
+class Formats
+{
+public:
+    static const std::unordered_map<std::string, Format> FORMATS;
+    static const Format& get(const std::string& format_id);
+};

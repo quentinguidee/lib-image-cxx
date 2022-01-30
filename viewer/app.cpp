@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-#include "decoder.hpp"
-#include "qoi_decoder.hpp"
+#include "qoi_format.hpp"
 #include "raw_image.hpp"
 
 Viewer::App::App() :
@@ -43,7 +42,7 @@ Viewer::App::App() :
     }
 
     image_widget = ImageWidget(RawImage());
-    image_widget.get_raw_image().decode(QOI::Decoder(), in);
+    image_widget.get_raw_image().decode(QOI_FORMAT, in);
     image_widget.initialize();
 }
 
