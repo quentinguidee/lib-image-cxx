@@ -5,6 +5,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_sdl.h"
 #include "image_widget.hpp"
+#include "menu_bar.hpp"
 
 namespace Viewer {
 
@@ -15,6 +16,7 @@ private:
     ImGuiIO* io;
     SDL_GLContext opengl_context;
 
+    MenuBar menu_bar;
     ImageWidget image_widget;
 
 public:

@@ -6,7 +6,8 @@
 #include "qoi_decoder.hpp"
 #include "raw_image.hpp"
 
-Viewer::Window::Window()
+Viewer::Window::Window() :
+    menu_bar()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -75,6 +76,7 @@ void Viewer::Window::run()
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
+        menu_bar.show();
         image_widget.show();
 
         glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
