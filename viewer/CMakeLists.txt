@@ -48,4 +48,5 @@ target_link_libraries(viewer
     image
     SDL2::SDL2
     ${OPENGL_gl_LIBRARY}
+    ${CMAKE_DL_LIBS}
 )
