@@ -1,11 +1,12 @@
 #include "raw_image.hpp"
 
-void RawImage::decode(const BaseDecoder& decoder, InputStream& in)
+void RawImage::decode(const Format& format, InputStream& in)
 {
-    decoder.decode(in, *this);
+    this->format = format;
+    format.get_decoder()->decode(in, *this);
 }
 
-void RawImage::encode(const BaseEncoder& encoder, OutputStream& out)
+void RawImage::encode(const Format& format, OutputStream& out)
 {
-    encoder.encode(out, *this);
+    format.get_encoder()->encode(out, *this);
 }

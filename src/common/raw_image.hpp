@@ -1,9 +1,12 @@
 #pragma once
 
+#include <string>
+
 #include "channels.hpp"
 #include "colorspace.hpp"
 #include "decoder.hpp"
 #include "encoder.hpp"
+#include "format.hpp"
 #include "pixel.hpp"
 #include "stream.hpp"
 
@@ -15,8 +18,10 @@ struct RawImage
     Colorspace colorspace;
     Channels channels;
 
+    Format format;
+
     RawImage() {}
 
-    void decode(const BaseDecoder& decoder, InputStream& in);
-    void encode(const BaseEncoder& encoder, OutputStream& out);
+    void decode(const Format& format, InputStream& in);
+    void encode(const Format& format, OutputStream& out);
 };

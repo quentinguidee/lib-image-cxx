@@ -5,7 +5,6 @@ set(SOURCES
 add_executable(benchmarks ${SOURCES})
 
 target_link_libraries(benchmarks
-    common
-    qoi
+    image
     benchmark::benchmark
 )
