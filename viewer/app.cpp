@@ -1,12 +1,19 @@
 #include "app.hpp"
 
-#include <iostream>
+#include <dirent.h>
 
-#include "qoi_format.hpp"
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "formats.hpp"
+#include "image_widget.hpp"
+#include "imgui.h"
 #include "raw_image.hpp"
 
 Viewer::App::App() :
-    menu_bar()
+    test_files(),
+    image_widgets()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -34,16 +41,7 @@ Viewer::App::App() :
     ImGui_ImplSDL2_InitForOpenGL(window, opengl_context);
     ImGui_ImplOpenGL3_Init();
 
-    InputFileStream in("../tests/test_images/image_1.qoi");
-    if (!in.is_open())
-    {
-        std::cout << "[ERROR] Couldn't open file" << std::endl;
-        exit(1);
-    }
-
-    image_widget = ImageWidget(RawImage());
-    image_widget.get_raw_image().decode(QOI_FORMAT, in);
-    image_widget.initialize();
+    refresh_test_images();
 }
 
 Viewer::App::~App()
@@ -75,8 +73,11 @@ void Viewer::App::run()
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        menu_bar.show();
-        image_widget.show();
+        show_menu_bar();
+        for (size_t i = 0; i < image_widgets.size(); ++i)
+            image_widgets[i].show();
+
+        ImGui::Render();
 
         glViewport(0, 0, (int)io->DisplaySize.x, (int)io->DisplaySize.y);
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
@@ -85,4 +86,68 @@ void Viewer::App::run()
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
     }
+}
+
+void Viewer::App::refresh_test_images()
+{
+    test_files.clear();
+    DIR* directory = opendir("../test_images");
+    if (directory == nullptr)
+    {
+        std::cerr << "test_images directory not found" << std::endl;
+        return;
+    }
+
+    struct dirent* file;
+    while ((file = readdir(directory)))
+    {
+        if (file->d_name[0] == 'i')
+            test_files.push_back(std::string(file->d_name));
+    }
+
+    closedir(directory);
+}
+
+void Viewer::App::show_menu_bar()
+{
+    ImGui::BeginMainMenuBar();
+
+    if (ImGui::BeginMenu("Open"))
+        show_menu_bar_open();
+    if (ImGui::BeginMenu("View", false))
+        show_menu_bar_view();
+
+    ImGui::EndMainMenuBar();
+}
+
+void Viewer::App::show_menu_bar_open()
+{
+    for (auto file : test_files)
+        if (ImGui::MenuItem(file.c_str()))
+            open_image_widget(file);
+
+    ImGui::Separator();
+    if (ImGui::MenuItem("refresh"))
+        refresh_test_images();
+
+    ImGui::EndMenu();
+}
+
+void Viewer::App::show_menu_bar_view()
+{
+    ImGui::EndMenu();
+}
+
+void Viewer::App::open_image_widget(const std::string& path)
+{
+    InputFileStream in("../test_images/" + path);
+    if (!in.is_open())
+    {
+        std::cout << "[ERROR] Couldn't open image '" << path << "'" << std::endl;
+        exit(1);
+    }
+    std::string extension = path.substr(path.find_last_of('.') + 1);
+    image_widgets.push_back(ImageWidget(RawImage()));
+    image_widgets.back().get_raw_image().decode(Formats::get_by_extension(extension), in);
+    image_widgets.back().initialize();
 }

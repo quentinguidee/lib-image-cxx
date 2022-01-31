@@ -2,6 +2,7 @@
 
 void RawImage::decode(const Format& format, InputStream& in)
 {
+    this->format = format;
     format.get_decoder()->decode(in, *this);
 }
 

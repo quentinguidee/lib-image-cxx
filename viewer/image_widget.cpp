@@ -1,6 +1,9 @@
 #include "image_widget.hpp"
 
+#include <algorithm>
+#include <ios>
 #include <iostream>
+#include <string>
 
 #include "SDL_opengl.h"
 #include "imgui.h"
@@ -18,11 +21,13 @@ Viewer::ImageWidget::~ImageWidget()
 
 void Viewer::ImageWidget::show() const
 {
-    ImGui::Begin("[FORMAT] [NAME]", NULL, ImGuiWindowFlags_NoResize);
+    std::string format = raw_image.format.extensions.front();
+    std::transform(format.begin(), format.end(), format.begin(), ::toupper);
+    std::string title = "[DECODER] " + format + " viewer";
+    ImGui::Begin(title.c_str(), NULL, ImGuiWindowFlags_NoResize);
     ImGui::Image((ImTextureID)(uintptr_t)texture_id, ImVec2(raw_image.width / 3.0f, raw_image.height / 3.0f));
     ImGui::SetWindowSize(ImVec2(raw_image.width / 3.0f + 20, raw_image.height / 3.0f + 36));
     ImGui::End();
-    ImGui::Render();
 }
 
 void Viewer::ImageWidget::initialize()

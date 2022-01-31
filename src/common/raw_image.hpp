@@ -18,7 +18,6 @@ struct RawImage
     Colorspace colorspace;
     Channels channels;
 
-    std::string filename;
     Format format;
 
     RawImage() {}

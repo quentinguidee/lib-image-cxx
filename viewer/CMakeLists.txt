@@ -1,13 +1,11 @@
 set(HEADERS
     image_widget.hpp
-    menu_bar.hpp
     app.hpp
 )
 
 set(SOURCES
     image_widget.cpp
     main.cpp
-    menu_bar.cpp
     app.cpp
 )
 
