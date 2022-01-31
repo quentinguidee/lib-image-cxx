@@ -57,7 +57,7 @@ Viewer::App::~App()
 
 void Viewer::App::run()
 {
-    ImVec4 clear_color = ImVec4(0.08, 0.08, 0.13, 1);
+    ImVec4 clear_color = ImVec4(0.05, 0.05, 0.07, 1);
 
     SDL_Event event;
     bool exit = false;
