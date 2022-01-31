@@ -85,5 +85,5 @@ void Viewer::ImageWidget::generate_widget_title()
 {
     std::string format = raw_image.format.extensions.front();
     std::transform(format.begin(), format.end(), format.begin(), ::toupper);
-    widget_title = "[DECODER] " + format + " viewer";
+    widget_title = "[DECODER] " + format + " viewer (" + std::to_string(raw_image.width) + "×" + std::to_string(raw_image.height) + ")";
 }
