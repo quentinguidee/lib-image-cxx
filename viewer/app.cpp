@@ -74,8 +74,8 @@ void Viewer::App::run()
         ImGui::NewFrame();
 
         show_menu_bar();
-        for (size_t i = 0; i < image_widgets.size(); ++i)
-            image_widgets[i].show();
+        for (auto it = image_widgets.begin(); it != image_widgets.end(); ++it)
+            if (!it->show()) image_widgets.erase(it);
 
         ImGui::Render();
 

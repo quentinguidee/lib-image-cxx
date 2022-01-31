@@ -50,14 +50,16 @@ void Viewer::ImageWidget::initialize()
     generate_widget_title();
 }
 
-void Viewer::ImageWidget::show()
+bool Viewer::ImageWidget::show()
 {
-    ImGui::Begin(widget_title.c_str(), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
-
-    show_zoom_level_dropdown();
-    show_image();
-
+    if (!opened) return false;
+    if (ImGui::Begin(widget_title.c_str(), &opened, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        show_zoom_level_dropdown();
+        show_image();
+    }
     ImGui::End();
+    return true;
 }
 
 void Viewer::ImageWidget::show_zoom_level_dropdown()

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <deque>
+#include <vector>
+
 #include "SDL.h"
 #include "SDL_opengl.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -17,7 +20,7 @@ private:
 
     std::vector<std::string> test_files;
 
-    std::vector<ImageWidget> image_widgets;
+    std::deque<ImageWidget> image_widgets;
 
 public:
     App();

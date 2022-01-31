@@ -11,6 +11,7 @@ private:
     GLuint texture_id;
     RawImage raw_image;
 
+    bool opened = true;
     std::string widget_title;
 
     static constexpr const int ZOOM_LEVELS_COUNT = 5;
@@ -24,7 +25,9 @@ public:
     ~ImageWidget();
 
     void initialize();
-    void show();
+
+    // Returns false if this window has been closed.
+    bool show();
 
     RawImage& get_raw_image() { return raw_image; };
     const RawImage& get_raw_image() const { return raw_image; };
