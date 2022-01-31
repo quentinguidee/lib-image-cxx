@@ -16,11 +16,15 @@ TEST(CommonTest, BufferStream)
     stream.write_i8(127);
     stream.write_u16(30000);
     stream.write_i16(-25000);
+    stream.write_u16(0x1234);
+    stream.write_u16_le(0x1234);
     stream.write_u32(4000000000);
     stream.write_i32(2000000000);
     stream.write_i32(-2000000000);
+    stream.write_u32(0x12345678);
+    stream.write_u32_le(0x12345678);
 
-    EXPECT_EQ(stream.size(), 21);
+    EXPECT_EQ(stream.size(), 33);
 
     EXPECT_EQ(stream.peek_u8(), 0);
     EXPECT_EQ(stream.read_u8(), 0);
@@ -33,9 +37,13 @@ TEST(CommonTest, BufferStream)
     EXPECT_EQ(stream.read_i8(), 127);
     EXPECT_EQ(stream.read_u16(), 30000);
     EXPECT_EQ(stream.read_i16(), -25000);
+    EXPECT_EQ(stream.read_u16(), 0x1234);
+    EXPECT_EQ(stream.read_u16(), 0x3412);
     EXPECT_EQ(stream.read_u32(), 4000000000);
     EXPECT_EQ(stream.read_i32(), 2000000000);
     EXPECT_EQ(stream.read_i32(), -2000000000);
+    EXPECT_EQ(stream.read_i32(), 0x12345678);
+    EXPECT_EQ(stream.read_u32(), 0x78563412);
 }
 
 TEST(CommonTest, FileStream)
