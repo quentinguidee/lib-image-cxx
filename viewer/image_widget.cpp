@@ -46,11 +46,13 @@ void Viewer::ImageWidget::initialize()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     delete[] pixels;
+
+    generate_widget_title();
 }
 
 void Viewer::ImageWidget::show()
 {
-    ImGui::Begin(get_window_title().c_str(), NULL, ImGuiWindowFlags_NoResize);
+    ImGui::Begin(widget_title.c_str(), NULL, ImGuiWindowFlags_NoResize);
 
     show_zoom_level_dropdown();
     show_image();
@@ -78,10 +80,9 @@ void Viewer::ImageWidget::show_image()
     ImGui::SetWindowSize(ImVec2(raw_image.width * zoom + 20, raw_image.height * zoom + 36 + 22));
 }
 
-std::string Viewer::ImageWidget::get_window_title()
+void Viewer::ImageWidget::generate_widget_title()
 {
     std::string format = raw_image.format.extensions.front();
     std::transform(format.begin(), format.end(), format.begin(), ::toupper);
-
-    return std::string("[DECODER] " + format + " viewer");
+    widget_title = "[DECODER] " + format + " viewer";
 }
