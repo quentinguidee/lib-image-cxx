@@ -9,6 +9,9 @@
 #include "imgui.h"
 #include "raw_image.hpp"
 
+constexpr const float Viewer::ImageWidget::ZOOM_LEVELS_VALUES[];
+constexpr const char* Viewer::ImageWidget::ZOOM_LEVELS_LABELS[];
+
 Viewer::ImageWidget::ImageWidget(RawImage raw_image) :
     raw_image(raw_image)
 {
@@ -17,17 +20,6 @@ Viewer::ImageWidget::ImageWidget(RawImage raw_image) :
 Viewer::ImageWidget::~ImageWidget()
 {
     glDeleteTextures(1, &texture_id);
-}
-
-void Viewer::ImageWidget::show() const
-{
-    std::string format = raw_image.format.extensions.front();
-    std::transform(format.begin(), format.end(), format.begin(), ::toupper);
-    std::string title = "[DECODER] " + format + " viewer";
-    ImGui::Begin(title.c_str(), NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Image((ImTextureID)(uintptr_t)texture_id, ImVec2(raw_image.width / 3.0f, raw_image.height / 3.0f));
-    ImGui::SetWindowSize(ImVec2(raw_image.width / 3.0f + 20, raw_image.height / 3.0f + 36));
-    ImGui::End();
 }
 
 void Viewer::ImageWidget::initialize()
@@ -54,4 +46,42 @@ void Viewer::ImageWidget::initialize()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     delete[] pixels;
+}
+
+void Viewer::ImageWidget::show()
+{
+    ImGui::Begin(get_window_title().c_str(), NULL, ImGuiWindowFlags_NoResize);
+
+    show_zoom_level_dropdown();
+    show_image();
+
+    ImGui::End();
+}
+
+void Viewer::ImageWidget::show_zoom_level_dropdown()
+{
+    if (ImGui::BeginCombo("Zoom", ZOOM_LEVELS_LABELS[current_zoom_level_id]))
+    {
+        for (int i = 0; i < ZOOM_LEVELS_COUNT; ++i)
+        {
+            if (ImGui::Selectable(ZOOM_LEVELS_LABELS[i], i == current_zoom_level_id))
+                current_zoom_level_id = i;
+        }
+        ImGui::EndCombo();
+    }
+}
+
+void Viewer::ImageWidget::show_image()
+{
+    float zoom = ZOOM_LEVELS_VALUES[current_zoom_level_id];
+    ImGui::Image((ImTextureID)(uintptr_t)texture_id, ImVec2(raw_image.width * zoom, raw_image.height * zoom));
+    ImGui::SetWindowSize(ImVec2(raw_image.width * zoom + 20, raw_image.height * zoom + 36 + 22));
+}
+
+std::string Viewer::ImageWidget::get_window_title()
+{
+    std::string format = raw_image.format.extensions.front();
+    std::transform(format.begin(), format.end(), format.begin(), ::toupper);
+
+    return std::string("[DECODER] " + format + " viewer");
 }
