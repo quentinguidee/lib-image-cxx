@@ -11,7 +11,7 @@
 
 TEST(QOITest, QOIConversion)
 {
-    InputFileStream in("test_images/image_1.qoi");
+    InputFileStream in("../test_images/image_1.qoi");
 
     ASSERT_TRUE(in.is_open());
 
@@ -23,7 +23,7 @@ TEST(QOITest, QOIConversion)
     EXPECT_EQ(image.pixels.size(), image.width * image.height);
     EXPECT_EQ(image.channels, Channels::RGBA);
 
-    OutputFileStream out("test_images/image_1_out.qoi");
+    OutputFileStream out("../test_images/image_1_out.qoi");
 
     ASSERT_TRUE(out.is_open());
 
@@ -31,8 +31,10 @@ TEST(QOITest, QOIConversion)
 
     out.close();
 
-    std::ifstream original("test_images/image_1.qoi");
-    std::ifstream exported("test_images/image_1_out.qoi");
+    std::ifstream original("../test_images/image_1.qoi");
+    std::ifstream exported("../test_images/image_1_out.qoi");
     while (!original.eof() && !exported.eof())
         ASSERT_EQ(original.get(), exported.get());
+
+    std::remove("../test_images/image_1_out.qoi");
 }
