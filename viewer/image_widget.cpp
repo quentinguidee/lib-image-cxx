@@ -52,7 +52,7 @@ void Viewer::ImageWidget::initialize()
 
 void Viewer::ImageWidget::show()
 {
-    ImGui::Begin(widget_title.c_str(), NULL, ImGuiWindowFlags_NoResize);
+    ImGui::Begin(widget_title.c_str(), NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
 
     show_zoom_level_dropdown();
     show_image();
@@ -77,7 +77,6 @@ void Viewer::ImageWidget::show_image()
 {
     float zoom = ZOOM_LEVELS_VALUES[current_zoom_level_id];
     ImGui::Image((ImTextureID)(uintptr_t)texture_id, ImVec2(raw_image.width * zoom, raw_image.height * zoom));
-    ImGui::SetWindowSize(ImVec2(raw_image.width * zoom + 20, raw_image.height * zoom + 36 + 22));
 }
 
 void Viewer::ImageWidget::generate_widget_title()
