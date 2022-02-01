@@ -74,8 +74,14 @@ void Viewer::App::run()
         ImGui::NewFrame();
 
         show_menu_bar();
-        for (auto it = image_widgets.begin(); it != image_widgets.end(); ++it)
-            if (!it->show()) image_widgets.erase(it);
+        auto it = image_widgets.begin();
+        while (it != image_widgets.end())
+        {
+            if (!it->show())
+                it = image_widgets.erase(it);
+            else
+                it++;
+        }
 
         ImGui::Render();
 
