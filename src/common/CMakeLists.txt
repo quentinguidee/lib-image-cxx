@@ -4,6 +4,7 @@ set(HEADERS
     decoder.hpp
     exceptions.hpp
     format.hpp
+    log.hpp
     pixel.hpp
     raw_image.hpp
     stream.hpp
