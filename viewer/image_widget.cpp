@@ -19,11 +19,20 @@ Viewer::ImageWidget::ImageWidget(RawImage raw_image) :
 
 Viewer::ImageWidget::~ImageWidget()
 {
-    glDeleteTextures(1, &texture_id);
+    if (image_loaded)
+        glDeleteTextures(1, &texture_id);
 }
 
 void Viewer::ImageWidget::initialize()
 {
+    generate_widget_title();
+
+    if (raw_image.pixels.size() != raw_image.width * raw_image.height)
+    {
+        error_message = "Couldn't display image: found " + std::to_string(raw_image.pixels.size()) + " pixels instead of " + std::to_string(raw_image.width * raw_image.height) + ".";
+        return;
+    }
+
     GLubyte* pixels = new GLubyte[raw_image.height * raw_image.width * 4];
     for (uint32_t i = 0; i < raw_image.pixels.size(); ++i)
     {
@@ -47,7 +56,7 @@ void Viewer::ImageWidget::initialize()
 
     delete[] pixels;
 
-    generate_widget_title();
+    image_loaded = true;
 }
 
 bool Viewer::ImageWidget::show()
@@ -55,8 +64,15 @@ bool Viewer::ImageWidget::show()
     if (!opened) return false;
     if (ImGui::Begin(widget_title.c_str(), &opened, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
     {
-        show_zoom_level_dropdown();
-        show_image();
+        if (image_loaded)
+        {
+            show_zoom_level_dropdown();
+            show_image();
+        }
+        else
+        {
+            show_error();
+        }
     }
     ImGui::End();
     return true;
@@ -79,6 +95,11 @@ void Viewer::ImageWidget::show_image()
 {
     float zoom = ZOOM_LEVELS_VALUES[current_zoom_level_id];
     ImGui::Image((ImTextureID)(uintptr_t)texture_id, ImVec2(raw_image.width * zoom, raw_image.height * zoom));
+}
+
+void Viewer::ImageWidget::show_error()
+{
+    ImGui::TextColored(ImVec4(0.8f, 0.1f, 0.1f, 1.0f), "%s", error_message.c_str());
 }
 
 void Viewer::ImageWidget::generate_widget_title()

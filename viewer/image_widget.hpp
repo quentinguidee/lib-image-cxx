@@ -8,11 +8,14 @@ namespace Viewer {
 class ImageWidget
 {
 private:
+    bool image_loaded = false;
     GLuint texture_id;
     RawImage raw_image;
 
     bool opened = true;
     std::string widget_title;
+
+    std::string error_message;
 
     static constexpr const int ZOOM_LEVELS_COUNT = 5;
     static constexpr const float ZOOM_LEVELS_VALUES[] = {0.25f, 0.5f, 1.0f, 1.5f, 2.0f};
@@ -35,6 +38,7 @@ public:
 private:
     void show_zoom_level_dropdown();
     void show_image();
+    void show_error();
 
     void generate_widget_title();
 };
