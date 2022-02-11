@@ -24,6 +24,16 @@ public:
     // Read 2 bytes as a signed integer (little endian)
     int16_t read_i16_le();
 
+    // Read 3 bytes as an unsigned integer (big endian)
+    uint32_t read_u24();
+    // Read 3 bytes as an unsigned integer (little endian)
+    uint32_t read_u24_le();
+
+    // Read 3 bytes as a signed integer (big endian)
+    int32_t read_i24();
+    // Read 3 bytes as a signed integer (little endian)
+    int32_t read_i24_le();
+
     // Read 4 bytes as an unsigned integer (big endian)
     uint32_t read_u32();
     // Read 4 bytes as an unsigned integer (little endian)
@@ -52,6 +62,16 @@ public:
     void write_i16(int16_t value);
     // Write a signed integer of 2 bytes (little endian)
     void write_i16_le(int16_t value);
+
+    // Write an unsigned integer of 3 bytes (big endian)
+    void write_u24(uint32_t value);
+    // Write an unsigned integer of 3 bytes (little endian)
+    void write_u24_le(uint32_t value);
+
+    // Write a signed integer of 3 bytes (big endian)
+    void write_i24(int32_t value);
+    // Write a signed integer of 3 bytes (little endian)
+    void write_i24_le(int32_t value);
 
     // Write an unsigned integer of 4 bytes (big endian)
     void write_u32(uint32_t value);
