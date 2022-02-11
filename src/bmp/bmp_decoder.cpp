@@ -181,13 +181,13 @@ void BMP::Decoder::decode_pixel_array_up_to_4_bpp()
     const int8_t BASE_OFFSET = 8 - BPP;
     const uint8_t BITMASK = pow(2, BPP) - 1;
 
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
         uint8_t value = in.read_u8();
         uint32_t decoded_bytes = 1;
         int8_t offset = BASE_OFFSET;
 
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
         {
             decode_one_pixel_color_table((value >> offset) & BITMASK);
             if (offset == 0)
@@ -209,12 +209,12 @@ void BMP::Decoder::decode_pixel_array_up_to_4_bpp()
 
 void BMP::Decoder::decode_pixel_array_8_bpp()
 {
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
             decode_one_pixel_color_table(in.read_u8());
 
-        for (uint32_t j = image.width; j % 4 != 0; ++j)
+        for (uint32_t x = image.width; x % 4 != 0; ++x)
             in.read_u8();
     }
 }
@@ -229,9 +229,9 @@ void BMP::Decoder::decode_pixel_array_16_bpp()
         settings.bitmask_b = Bitmask(0b1111100000000000);
     }
 
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
             decode_one_pixel_bitmask(in.read_u16_le());
 
         if (image.width % 2 != 0)
@@ -244,9 +244,9 @@ void BMP::Decoder::decode_pixel_array_24_bpp()
     if (settings.compression == Compression::BITFIELDS)
         throw DecodeException("The bitfields compression method is not allowed for 24bpp images.");
 
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
             image.pixels.push_back(read_one_pixel_r8g8b8());
 
         for (uint32_t decoded_bytes = image.width * 3; decoded_bytes % 4 != 0; ++decoded_bytes)

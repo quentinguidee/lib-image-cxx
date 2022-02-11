@@ -168,15 +168,15 @@ void BMP::Encoder::encode_pixel_array_up_to_4_bpp()
     const int8_t BASE_OFFSET = 8 - BPP;
     const uint8_t BITMASK = pow(2, BPP) - 1;
 
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
         uint8_t value = 0;
         uint32_t encoded_bytes = 0;
         int8_t offset = BASE_OFFSET;
 
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
         {
-            const Pixel& pixel = image.get_pixel(j, i);
+            const Pixel& pixel = image.get_pixel(x, y);
             const uint8_t index = colors_table_indexes[(pixel.r) + (pixel.g * 255) + (pixel.b * 255 * 255)];
             value |= (index & BITMASK) << offset;
             if (offset == 0)
@@ -205,11 +205,11 @@ void BMP::Encoder::encode_pixel_array_up_to_4_bpp()
 
 void BMP::Encoder::encode_pixel_array_8_bpp()
 {
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
         {
-            const Pixel& pixel = image.get_pixel(j, i);
+            const Pixel& pixel = image.get_pixel(x, y);
             const uint8_t index = colors_table_indexes[(pixel.r) + (pixel.g * 255) + (pixel.b * 255 * 255)];
             out.write_u8(index);
         }
@@ -229,11 +229,11 @@ void BMP::Encoder::encode_pixel_array_16_bpp()
         settings.bitmask_b = Bitmask(0b1111100000000000);
     }
 
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
-        for (uint32_t j = 0; j < image.width; ++j)
+        for (uint32_t x = 0; x < image.width; ++x)
         {
-            const Pixel& pixel = image.get_pixel(j, i);
+            const Pixel& pixel = image.get_pixel(x, y);
 
             uint16_t value = 0;
             value |= ((uint16_t)round(pixel.r * settings.bitmask_r.divider / 255) << settings.bitmask_r.offset) & settings.bitmask_r.value;
@@ -254,10 +254,10 @@ void BMP::Encoder::encode_pixel_array_24_bpp()
     if (settings.compression == Compression::BITFIELDS)
         throw std::runtime_error("The bitfields compression method is not allowed for 24bpp images.");
 
-    for (uint32_t i = 0; i < image.height; ++i)
+    for (uint32_t y = 0; y < image.height; ++y)
     {
-        for (uint32_t j = 0; j < image.width; ++j)
-            write_one_pixel_r8g8b8(image.get_pixel(j, i));
+        for (uint32_t x = 0; x < image.width; ++x)
+            write_one_pixel_r8g8b8(image.get_pixel(x, y));
 
         for (uint32_t decoded_bytes = image.width * 3; decoded_bytes % 4 != 0; ++decoded_bytes)
             out.write_u8(0);
