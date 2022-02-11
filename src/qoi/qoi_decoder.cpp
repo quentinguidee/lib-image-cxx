@@ -3,9 +3,15 @@
 #include "exceptions.hpp"
 #include "pixel.hpp"
 
-void QOI::Decoder::decode(InputStream &in, RawImage &image) const
+bool QOI::Decoder::can_decode(InputStream &in)
 {
-    decode_header(in, image);
+    // TODO: peek_u32 and read 'qoif'
+    return in.peek_u8() == 'q';
+}
+
+void QOI::Decoder::decode()
+{
+    decode_header();
 
     image.pixels.clear();
     image.pixels.reserve(image.width * image.height);
@@ -23,17 +29,17 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
         if (run > 0)
             --run;
         else if (tag_8 == RGB_TAG)
-            decode_rgb(in, pixel);
+            decode_rgb(pixel);
         else if (tag_8 == RGBA_TAG)
-            decode_rgba(in, pixel);
+            decode_rgba(pixel);
         else if (tag_2 == INDEX_TAG)
-            pixel = previously_seen_pixels[decode_index(in)];
+            pixel = previously_seen_pixels[decode_index()];
         else if (tag_2 == DIFF_TAG)
-            decode_diff(in, pixel);
+            decode_diff(pixel);
         else if (tag_2 == LUMA_TAG)
-            decode_luma(in, pixel);
+            decode_luma(pixel);
         else if (tag_2 == RUN_TAG)
-            run = decode_run(in);
+            run = decode_run();
         else
             throw DecodeException("Tag not recognized.");
 
@@ -42,7 +48,7 @@ void QOI::Decoder::decode(InputStream &in, RawImage &image) const
     }
 }
 
-void QOI::Decoder::decode_header(InputStream &in, RawImage &image) const
+void QOI::Decoder::decode_header() const
 {
     in.read_u32();
     image.width = in.read_u32();
@@ -51,12 +57,12 @@ void QOI::Decoder::decode_header(InputStream &in, RawImage &image) const
     image.colorspace = in.read_u8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
 }
 
-uint8_t QOI::Decoder::decode_index(InputStream &in) const
+uint8_t QOI::Decoder::decode_index() const
 {
     return in.read_u8();
 }
 
-void QOI::Decoder::decode_diff(InputStream &in, Pixel &pixel) const
+void QOI::Decoder::decode_diff(Pixel &pixel) const
 {
     uint8_t value = in.read_u8();
 
@@ -69,7 +75,7 @@ void QOI::Decoder::decode_diff(InputStream &in, Pixel &pixel) const
     pixel.b += diff_b - 2;
 }
 
-void QOI::Decoder::decode_luma(InputStream &in, Pixel &pixel) const
+void QOI::Decoder::decode_luma(Pixel &pixel) const
 {
     uint8_t value = in.read_u8();
     uint8_t diff_g = value & 0x3f;
@@ -83,7 +89,7 @@ void QOI::Decoder::decode_luma(InputStream &in, Pixel &pixel) const
     pixel.b += (diff_g - 32) + (diff_b_g - 8);
 }
 
-void QOI::Decoder::decode_rgb(InputStream &in, Pixel &pixel) const
+void QOI::Decoder::decode_rgb(Pixel &pixel) const
 {
     in.read_u8();
     pixel.r = in.read_u8();
@@ -91,7 +97,7 @@ void QOI::Decoder::decode_rgb(InputStream &in, Pixel &pixel) const
     pixel.b = in.read_u8();
 }
 
-void QOI::Decoder::decode_rgba(InputStream &in, Pixel &pixel) const
+void QOI::Decoder::decode_rgba(Pixel &pixel) const
 {
     in.read_u8();
     pixel.r = in.read_u8();
@@ -100,7 +106,7 @@ void QOI::Decoder::decode_rgba(InputStream &in, Pixel &pixel) const
     pixel.a = in.read_u8();
 }
 
-uint8_t QOI::Decoder::decode_run(InputStream &in) const
+uint8_t QOI::Decoder::decode_run() const
 {
     return in.read_u8() & 0x3f;
 }

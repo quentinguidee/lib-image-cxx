@@ -1,12 +1,17 @@
 #include "raw_image.hpp"
 
-void RawImage::decode(const Format& format, InputStream& in)
+#include <algorithm>
+
+#include "decoder.hpp"
+
+const Pixel& RawImage::get_pixel(uint32_t x, uint32_t y)
 {
-    this->format = format;
-    format.get_decoder()->decode(in, *this);
+    return pixels[y * width + x];
 }
 
-void RawImage::encode(const Format& format, OutputStream& out)
+void RawImage::flip_vertically()
 {
-    format.get_encoder()->encode(out, *this);
+    for (uint32_t i = 0; i < height / 2; ++i)
+        for (uint32_t j = 0; j < width; ++j)
+            std::swap(pixels[(i * width) + j], pixels[((height - i) * width) + j]);
 }

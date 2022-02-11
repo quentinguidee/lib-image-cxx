@@ -11,7 +11,8 @@ static void BM_QOI_decode(benchmark::State& state)
         InputFileStream in("../test_images/image_1.qoi");
 
         RawImage image = RawImage();
-        image.decode(QOI_FORMAT, in);
+        QOI::Decoder decoder = QOI::Decoder(in, image);
+        decoder.decode();
     }
 }
 
@@ -22,13 +23,14 @@ static void BM_QOI_encode(benchmark::State& state)
     InputFileStream in("../test_images/image_1.qoi");
 
     RawImage image = RawImage();
-    image.decode(QOI_FORMAT, in);
+    QOI::Decoder decoder = QOI::Decoder(in, image);
+    decoder.decode();
 
     for (auto _ : state)
     {
         OutputFileStream out("../test_images/image_1_out.qoi");
-        image.encode(QOI_FORMAT, out);
-        out.close();
+        QOI::Encoder encoder(out, image);
+        encoder.encode();
     }
 
     std::remove("../test_images/image_1_out.qoi");

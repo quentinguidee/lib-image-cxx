@@ -7,13 +7,14 @@
 
 #include "SDL_opengl.h"
 #include "imgui.h"
+#include "log.hpp"
 #include "raw_image.hpp"
 
 constexpr const float Viewer::ImageWidget::ZOOM_LEVELS_VALUES[];
 constexpr const char* Viewer::ImageWidget::ZOOM_LEVELS_LABELS[];
 
-Viewer::ImageWidget::ImageWidget(RawImage raw_image) :
-    raw_image(raw_image)
+Viewer::ImageWidget::ImageWidget(const std::string& filename) :
+    filename(filename)
 {
 }
 
@@ -62,6 +63,7 @@ void Viewer::ImageWidget::initialize()
 bool Viewer::ImageWidget::show()
 {
     if (!opened) return false;
+    if (texture_id == 0) initialize();
     if (ImGui::Begin(widget_title.c_str(), &opened, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
     {
         if (image_loaded)
@@ -104,7 +106,5 @@ void Viewer::ImageWidget::show_error()
 
 void Viewer::ImageWidget::generate_widget_title()
 {
-    std::string format = raw_image.format.extensions.front();
-    std::transform(format.begin(), format.end(), format.begin(), ::toupper);
-    widget_title = "[DECODER] " + format + " viewer (" + std::to_string(raw_image.width) + "×" + std::to_string(raw_image.height) + ")";
+    widget_title = "[DECODER] " + filename + " (" + std::to_string(raw_image.width) + "×" + std::to_string(raw_image.height) + ")";
 }

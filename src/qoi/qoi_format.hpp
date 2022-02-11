@@ -12,6 +12,4 @@ static const Format QOI_FORMAT{
     "qoi",
     "Quite OK image format",
     {"qoi"},
-    []() -> std::unique_ptr<BaseEncoder> { return std::unique_ptr<BaseEncoder>(new QOI::Encoder()); },
-    []() -> std::unique_ptr<BaseDecoder> { return std::unique_ptr<BaseDecoder>(new QOI::Decoder()); },
 };

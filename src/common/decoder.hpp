@@ -7,8 +7,15 @@ struct RawImage;
 
 class BaseDecoder
 {
+protected:
+    InputStream& in;
+    RawImage& image;
+
 public:
+    BaseDecoder(InputStream& in, RawImage& image) :
+        in(in), image(image) {}
+
     virtual ~BaseDecoder() = default;
 
-    virtual void decode(InputStream& in, RawImage& image) const = 0;
+    virtual void decode() = 0;
 };

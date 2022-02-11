@@ -3,7 +3,6 @@
 #include <unordered_map>
 
 #include "format.hpp"
-#include "qoi_format.hpp"
 
 class Formats
 {

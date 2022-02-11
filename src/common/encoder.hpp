@@ -7,8 +7,15 @@ struct RawImage;
 
 class BaseEncoder
 {
+protected:
+    OutputStream& out;
+    RawImage& image;
+
 public:
+    BaseEncoder(OutputStream& out, RawImage& image) :
+        out(out), image(image) {}
+
     virtual ~BaseEncoder() = default;
 
-    virtual void encode(OutputStream& out, RawImage& image) const = 0;
+    virtual void encode() = 0;
 };

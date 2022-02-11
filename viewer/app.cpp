@@ -2,13 +2,21 @@
 
 #include <dirent.h>
 
+#include <exception>
+#include <functional>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-#include "formats.hpp"
+#include "SDL_video.h"
+#include "bmp_decoder.hpp"
+#include "bmp_format.hpp"
 #include "image_widget.hpp"
+#include "image_widget_bmp.hpp"
+#include "image_widget_qoi.hpp"
 #include "imgui.h"
+#include "qoi_format.hpp"
 #include "raw_image.hpp"
 
 Viewer::App::App() :
@@ -152,8 +160,11 @@ void Viewer::App::open_image_widget(const std::string& path)
         std::cout << "[ERROR] Couldn't open image '" << path << "'" << std::endl;
         exit(1);
     }
-    std::string extension = path.substr(path.find_last_of('.') + 1);
-    image_widgets.push_back(ImageWidget(RawImage()));
-    image_widgets.back().get_raw_image().decode(Formats::get_by_extension(extension), in);
-    image_widgets.back().initialize();
+
+    if (QOI::Decoder::can_decode(in))
+        image_widgets.push_back(std::move(QOIImageWidget(in, path)));
+    else if (BMP::Decoder::can_decode(in))
+        image_widgets.push_back(std::move(BMPImageWidget(in, path)));
+    else
+        throw std::runtime_error("Couldn't decode this image.");
 }

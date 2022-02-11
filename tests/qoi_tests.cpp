@@ -16,7 +16,7 @@ TEST(QOITest, QOIConversion)
     ASSERT_TRUE(in.is_open());
 
     RawImage image = RawImage();
-    image.decode(QOI_FORMAT, in);
+    QOI::Decoder(in, image).decode();
 
     EXPECT_EQ(image.width, 1920);
     EXPECT_EQ(image.height, 1139);
@@ -27,7 +27,7 @@ TEST(QOITest, QOIConversion)
 
     ASSERT_TRUE(out.is_open());
 
-    image.encode(QOI_FORMAT, out);
+    QOI::Encoder(out, image).encode();
 
     out.close();
 

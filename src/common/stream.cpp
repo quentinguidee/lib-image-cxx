@@ -38,6 +38,42 @@ int16_t InputStream::read_i16_le()
     return value;
 }
 
+uint32_t InputStream::read_u24()
+{
+    uint32_t value = 0;
+    value |= read_u8() << 16;
+    value |= read_u8() << 8;
+    value |= read_u8();
+    return value;
+}
+
+uint32_t InputStream::read_u24_le()
+{
+    uint32_t value = 0;
+    value |= read_u8();
+    value |= read_u8() << 8;
+    value |= read_u8() << 16;
+    return value;
+}
+
+int32_t InputStream::read_i24()
+{
+    int32_t value = 0;
+    value |= read_u8() << 16;
+    value |= read_u8() << 8;
+    value |= read_u8();
+    return value;
+}
+
+int32_t InputStream::read_i24_le()
+{
+    int32_t value = 0;
+    value |= read_u8();
+    value |= read_u8() << 8;
+    value |= read_u8() << 16;
+    return value;
+}
+
 uint32_t InputStream::read_u32()
 {
     uint32_t value = 0;
@@ -100,6 +136,34 @@ void OutputStream::write_i16_le(int16_t value)
 {
     write_i8(value & 0x00ff);
     write_i8((value & 0xff00) >> 8);
+}
+
+void OutputStream::write_u24(uint32_t value)
+{
+    write_u8((value & 0x00ff0000) >> 16);
+    write_u8((value & 0x0000ff00) >> 8);
+    write_u8(value & 0x000000ff);
+}
+
+void OutputStream::write_u24_le(uint32_t value)
+{
+    write_u8(value & 0x000000ff);
+    write_u8((value & 0x0000ff00) >> 8);
+    write_u8((value & 0x00ff0000) >> 16);
+}
+
+void OutputStream::write_i24(int32_t value)
+{
+    write_i8((value & 0x00ff0000) >> 16);
+    write_i8((value & 0x0000ff00) >> 8);
+    write_i8(value & 0x000000ff);
+}
+
+void OutputStream::write_i24_le(int32_t value)
+{
+    write_i8(value & 0x000000ff);
+    write_i8((value & 0x0000ff00) >> 8);
+    write_i8((value & 0x00ff0000) >> 16);
 }
 
 void OutputStream::write_u32(uint32_t value)
