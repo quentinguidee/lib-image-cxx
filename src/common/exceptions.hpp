@@ -3,24 +3,20 @@
 #include <exception>
 #include <string>
 
-class DecodeException : public std::exception
+class DecodeException : public std::runtime_error
 {
-private:
-    std::string error_message;
-
 public:
-    DecodeException(const std::string& error_message) :
-        error_message(error_message)
+    DecodeException(const std::string& error_message = "") :
+        std::runtime_error("Error while decoding image. " + error_message)
     {
     }
+};
 
-    const char* what() const throw()
+class UnsupportedVersionException : public std::runtime_error
+{
+public:
+    UnsupportedVersionException(const std::string& error_message = "") :
+        std::runtime_error("Error while encoding/decoding image. Probably because of an unsupported version. " + error_message)
     {
-        return "Error while decoding QOI image.";
-    }
-
-    const std::string message()
-    {
-        return error_message;
     }
 };
