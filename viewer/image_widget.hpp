@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL_opengl.h"
+#include "format.hpp"
 #include "raw_image.hpp"
 
 namespace Viewer {
@@ -9,8 +10,8 @@ class ImageWidget
 {
 private:
     bool image_loaded = false;
-    GLuint texture_id;
-    RawImage raw_image;
+    GLuint texture_id = 0;
+    std::string filename;
 
     bool opened = true;
     std::string widget_title;
@@ -22,9 +23,12 @@ private:
     static constexpr const char* ZOOM_LEVELS_LABELS[] = {"x0.25", "x0.5", "x1", "x1.5", "x2"};
     int current_zoom_level_id = 0;
 
+protected:
+    RawImage raw_image;
+
 public:
     ImageWidget() {}
-    ImageWidget(RawImage raw_image);
+    ImageWidget(const std::string& filename);
     ~ImageWidget();
 
     void initialize();
