@@ -6,7 +6,6 @@
 #include "colorspace.hpp"
 #include "decoder.hpp"
 #include "encoder.hpp"
-#include "format.hpp"
 #include "pixel.hpp"
 #include "stream.hpp"
 
@@ -18,10 +17,9 @@ struct RawImage
     Colorspace colorspace;
     Channels channels;
 
-    Format format;
-
     RawImage() {}
 
-    void decode(const Format& format, InputStream& in);
-    void encode(const Format& format, OutputStream& out);
+    const Pixel &get_pixel(uint32_t x, uint32_t y);
+
+    void flip_vertically();
 };

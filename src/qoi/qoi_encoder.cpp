@@ -2,9 +2,9 @@
 
 #include "pixel.hpp"
 
-void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
+void QOI::Encoder::encode()
 {
-    encode_header(out, image);
+    encode_header();
 
     Pixel previously_seen_pixels[64];
     Pixel previous_pixel;
@@ -17,7 +17,7 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
             ++run;
             if (run == 62)
             {
-                encode_run(out, run);
+                encode_run(run);
                 run = 0;
             }
         }
@@ -25,14 +25,14 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
         {
             if (run != 0)
             {
-                encode_run(out, run);
+                encode_run(run);
                 run = 0;
             }
 
             uint8_t index = hash_pixel(current_pixel);
             if (previously_seen_pixels[index] == current_pixel)
             {
-                encode_index(out, index);
+                encode_index(index);
             }
             else if (current_pixel.a == previous_pixel.a)
             {
@@ -47,23 +47,23 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
                     -2 <= diff_g && diff_g <= 1 &&
                     -2 <= diff_b && diff_b <= 1)
                 {
-                    encode_diff(out, diff_r, diff_g, diff_b);
+                    encode_diff(diff_r, diff_g, diff_b);
                 }
                 else if (
                     -8 <= diff_r_g && diff_r_g <= 7 &&
                     -32 <= diff_g && diff_g <= 31 &&
                     -8 <= diff_b_g && diff_b_g <= 7)
                 {
-                    encode_luma(out, diff_g, diff_r_g, diff_b_g);
+                    encode_luma(diff_g, diff_r_g, diff_b_g);
                 }
                 else
                 {
-                    encode_rgb(out, current_pixel);
+                    encode_rgb(current_pixel);
                 }
             }
             else
             {
-                encode_rgba(out, current_pixel);
+                encode_rgba(current_pixel);
             }
             previously_seen_pixels[index] = current_pixel;
             previous_pixel = current_pixel;
@@ -71,12 +71,12 @@ void QOI::Encoder::encode(OutputStream &out, RawImage &image) const
     }
 
     if (run != 0)
-        encode_run(out, run);
+        encode_run(run);
 
-    encode_footer(out);
+    encode_footer();
 }
 
-void QOI::Encoder::encode_header(OutputStream &out, const RawImage &image) const
+void QOI::Encoder::encode_header() const
 {
     out.write_u32(HEADER_MAGIC);
     out.write_u32(image.width);
@@ -85,24 +85,24 @@ void QOI::Encoder::encode_header(OutputStream &out, const RawImage &image) const
     out.write_u8(image.colorspace == Colorspace::SRGB ? 0 : 1);
 }
 
-void QOI::Encoder::encode_index(OutputStream &out, uint8_t index) const
+void QOI::Encoder::encode_index(uint8_t index) const
 {
     out.write_u8(INDEX_TAG | index);
 }
 
-void QOI::Encoder::encode_diff(OutputStream &out, int8_t diff_r, int8_t diff_g, int8_t diff_b) const
+void QOI::Encoder::encode_diff(int8_t diff_r, int8_t diff_g, int8_t diff_b) const
 {
     uint8_t value = (diff_r + 2) << 4 | (diff_g + 2) << 2 | (diff_b + 2);
     out.write_u8(DIFF_TAG | (value & 0x3f));
 }
 
-void QOI::Encoder::encode_luma(OutputStream &out, int8_t diff_g, int8_t diff_r_g, int8_t diff_b_g) const
+void QOI::Encoder::encode_luma(int8_t diff_g, int8_t diff_r_g, int8_t diff_b_g) const
 {
     out.write_u8(LUMA_TAG | (diff_g + 32));
     out.write_u8((diff_r_g + 8) << 4 | (diff_b_g + 8));
 }
 
-void QOI::Encoder::encode_rgb(OutputStream &out, const Pixel &pixel) const
+void QOI::Encoder::encode_rgb(const Pixel &pixel) const
 {
     out.write_u8(RGB_TAG);
     out.write_u8(pixel.r);
@@ -110,7 +110,7 @@ void QOI::Encoder::encode_rgb(OutputStream &out, const Pixel &pixel) const
     out.write_u8(pixel.b);
 }
 
-void QOI::Encoder::encode_rgba(OutputStream &out, const Pixel &pixel) const
+void QOI::Encoder::encode_rgba(const Pixel &pixel) const
 {
     out.write_u8(RGBA_TAG);
     out.write_u8(pixel.r);
@@ -119,12 +119,12 @@ void QOI::Encoder::encode_rgba(OutputStream &out, const Pixel &pixel) const
     out.write_u8(pixel.a);
 }
 
-void QOI::Encoder::encode_run(OutputStream &out, uint8_t run) const
+void QOI::Encoder::encode_run(uint8_t run) const
 {
     out.write_u8(RUN_TAG | (run - 1));
 }
 
-void QOI::Encoder::encode_footer(OutputStream &out) const
+void QOI::Encoder::encode_footer() const
 {
     out.write_u32(0x00000000);
     out.write_u32(0x00000001);

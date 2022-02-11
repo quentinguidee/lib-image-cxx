@@ -9,16 +9,19 @@ namespace QOI {
 class Encoder final : public BaseEncoder
 {
 public:
-    void encode(OutputStream &out, RawImage &image) const override;
+    Encoder(OutputStream &out, RawImage &image) :
+        BaseEncoder(out, image) {}
 
-    void encode_header(OutputStream &out, const RawImage &image) const;
-    void encode_index(OutputStream &out, uint8_t index) const;
-    void encode_diff(OutputStream &out, int8_t diff_r, int8_t diff_g, int8_t diff_b) const;
-    void encode_luma(OutputStream &out, int8_t diff_g, int8_t diff_r_g, int8_t diff_b_g) const;
-    void encode_rgb(OutputStream &out, const Pixel &pixel) const;
-    void encode_rgba(OutputStream &out, const Pixel &pixel) const;
-    void encode_run(OutputStream &out, uint8_t run) const;
-    void encode_footer(OutputStream &out) const;
+    void encode() override;
+
+    void encode_header() const;
+    void encode_index(uint8_t index) const;
+    void encode_diff(int8_t diff_r, int8_t diff_g, int8_t diff_b) const;
+    void encode_luma(int8_t diff_g, int8_t diff_r_g, int8_t diff_b_g) const;
+    void encode_rgb(const Pixel &pixel) const;
+    void encode_rgba(const Pixel &pixel) const;
+    void encode_run(uint8_t run) const;
+    void encode_footer() const;
 };
 
 }
