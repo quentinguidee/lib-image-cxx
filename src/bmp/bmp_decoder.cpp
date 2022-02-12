@@ -11,9 +11,7 @@
 
 bool BMP::Decoder::can_decode(InputStream& in)
 {
-    // TODO: peek_u16 and read 'BM'.
-    // Also check if the header version is supported.
-    return in.peek_u8() == 'B';
+    return in.peek_u16() == (uint16_t)Signature::BM;
 }
 
 void BMP::Decoder::decode()

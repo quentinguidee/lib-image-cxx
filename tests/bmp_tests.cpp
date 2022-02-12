@@ -16,6 +16,8 @@ void convert_bmp_to_bmp(const std::string& filename)
 
     ASSERT_TRUE(in.is_open());
 
+    EXPECT_TRUE(BMP::Decoder::can_decode(in));
+
     RawImage image = RawImage();
     BMP::Decoder decoder(in, image);
     decoder.decode();
