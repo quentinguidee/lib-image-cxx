@@ -2,14 +2,17 @@
 
 #include <fstream>
 #include <ios>
+#include <istream>
 #include <ostream>
 #include <sstream>
 
 #include "bits.hpp"
 
-long input_stream_size(std::istream& input_stream)
+long InputStream::size()
 {
     // TODO: Handle tellg error (if it returns -1).
+
+    std::istream& input_stream = get_input_stream();
 
     long current_position = input_stream.tellg();
 
@@ -20,6 +23,20 @@ long input_stream_size(std::istream& input_stream)
     input_stream.seekg(current_position);
 
     return end - begin;
+}
+
+long InputStream::remaining_size()
+{
+    // TODO: Handle tellg error (if it returns -1).
+
+    std::istream& input_stream = get_input_stream();
+
+    long current_position = input_stream.tellg();
+    input_stream.seekg(0, std::ios::end);
+    long end = input_stream.tellg();
+    input_stream.seekg(current_position);
+
+    return end - current_position;
 }
 
 uint32_t InputStream::read(uint8_t n_bytes)
