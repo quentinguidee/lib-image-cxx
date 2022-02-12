@@ -15,6 +15,8 @@ TEST(QOITest, QOIConversion)
 
     ASSERT_TRUE(in.is_open());
 
+    EXPECT_TRUE(QOI::Decoder::can_decode(in));
+
     RawImage image = RawImage();
     QOI::Decoder(in, image).decode();
 

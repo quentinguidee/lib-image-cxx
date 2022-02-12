@@ -5,8 +5,7 @@
 
 bool QOI::Decoder::can_decode(InputStream &in)
 {
-    // TODO: peek_u32 and read 'qoif'
-    return in.peek_u8() == 'q';
+    return in.peek_u32() == HEADER_MAGIC;
 }
 
 void QOI::Decoder::decode()
