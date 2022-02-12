@@ -6,196 +6,34 @@
 #include <ostream>
 #include <sstream>
 
-uint16_t InputStream::read_u16()
-{
-    uint16_t value = 0;
-    value |= read_u8() << 8;
-    value |= read_u8();
-    return value;
-}
+#include "bits.hpp"
 
-uint16_t InputStream::read_u16_le()
-{
-    uint16_t value = 0;
-    value |= read_u8();
-    value |= read_u8() << 8;
-    return value;
-}
-
-int16_t InputStream::read_i16()
-{
-    int16_t value = 0;
-    value |= read_u8() << 8;
-    value |= read_u8();
-    return value;
-}
-
-int16_t InputStream::read_i16_le()
-{
-    int16_t value = 0;
-    value |= read_u8();
-    value |= read_u8() << 8;
-    return value;
-}
-
-uint32_t InputStream::read_u24()
+uint32_t InputStream::read(uint8_t n_bytes)
 {
     uint32_t value = 0;
-    value |= read_u8() << 16;
-    value |= read_u8() << 8;
-    value |= read_u8();
+    for (int8_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
+        value |= read_u8() << offset;
     return value;
 }
 
-uint32_t InputStream::read_u24_le()
+uint32_t InputStream::read_le(uint8_t n_bytes)
 {
     uint32_t value = 0;
-    value |= read_u8();
-    value |= read_u8() << 8;
-    value |= read_u8() << 16;
+    for (uint8_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
+        value |= read_u8() << offset;
     return value;
 }
 
-int32_t InputStream::read_i24()
+void OutputStream::write(uint8_t n_bytes, uint32_t value)
 {
-    int32_t value = 0;
-    value |= read_u8() << 16;
-    value |= read_u8() << 8;
-    value |= read_u8();
-    return value;
+    for (int8_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
+        write_u8(value >> offset);
 }
 
-int32_t InputStream::read_i24_le()
+void OutputStream::write_le(uint8_t n_bytes, uint32_t value)
 {
-    int32_t value = 0;
-    value |= read_u8();
-    value |= read_u8() << 8;
-    value |= read_u8() << 16;
-    return value;
-}
-
-uint32_t InputStream::read_u32()
-{
-    uint32_t value = 0;
-    value |= read_u8() << 24;
-    value |= read_u8() << 16;
-    value |= read_u8() << 8;
-    value |= read_u8();
-    return value;
-}
-
-uint32_t InputStream::read_u32_le()
-{
-    uint32_t value = 0;
-    value |= read_u8();
-    value |= read_u8() << 8;
-    value |= read_u8() << 16;
-    value |= read_u8() << 24;
-    return value;
-}
-
-int32_t InputStream::read_i32()
-{
-    int32_t value = 0;
-    value |= read_u8() << 24;
-    value |= read_u8() << 16;
-    value |= read_u8() << 8;
-    value |= read_u8();
-    return value;
-}
-
-int32_t InputStream::read_i32_le()
-{
-    int32_t value = 0;
-    value |= read_u8();
-    value |= read_u8() << 8;
-    value |= read_u8() << 16;
-    value |= read_u8() << 24;
-    return value;
-}
-
-void OutputStream::write_u16(uint16_t value)
-{
-    write_u8((value & 0xff00) >> 8);
-    write_u8(value & 0x00ff);
-}
-
-void OutputStream::write_u16_le(uint16_t value)
-{
-    write_u8(value & 0x00ff);
-    write_u8((value & 0xff00) >> 8);
-}
-
-void OutputStream::write_i16(int16_t value)
-{
-    write_i8((value & 0xff00) >> 8);
-    write_i8(value & 0x00ff);
-}
-
-void OutputStream::write_i16_le(int16_t value)
-{
-    write_i8(value & 0x00ff);
-    write_i8((value & 0xff00) >> 8);
-}
-
-void OutputStream::write_u24(uint32_t value)
-{
-    write_u8((value & 0x00ff0000) >> 16);
-    write_u8((value & 0x0000ff00) >> 8);
-    write_u8(value & 0x000000ff);
-}
-
-void OutputStream::write_u24_le(uint32_t value)
-{
-    write_u8(value & 0x000000ff);
-    write_u8((value & 0x0000ff00) >> 8);
-    write_u8((value & 0x00ff0000) >> 16);
-}
-
-void OutputStream::write_i24(int32_t value)
-{
-    write_i8((value & 0x00ff0000) >> 16);
-    write_i8((value & 0x0000ff00) >> 8);
-    write_i8(value & 0x000000ff);
-}
-
-void OutputStream::write_i24_le(int32_t value)
-{
-    write_i8(value & 0x000000ff);
-    write_i8((value & 0x0000ff00) >> 8);
-    write_i8((value & 0x00ff0000) >> 16);
-}
-
-void OutputStream::write_u32(uint32_t value)
-{
-    write_u8((value & 0xff000000) >> 24);
-    write_u8((value & 0x00ff0000) >> 16);
-    write_u8((value & 0x0000ff00) >> 8);
-    write_u8(value & 0x000000ff);
-}
-
-void OutputStream::write_u32_le(uint32_t value)
-{
-    write_u8(value & 0x000000ff);
-    write_u8((value & 0x0000ff00) >> 8);
-    write_u8((value & 0x00ff0000) >> 16);
-    write_u8((value & 0xff000000) >> 24);
-}
-
-void OutputStream::write_i32(int32_t value)
-{
-    write_i8((value & 0xff000000) >> 24);
-    write_i8((value & 0x00ff0000) >> 16);
-    write_i8((value & 0x0000ff00) >> 8);
-    write_i8(value & 0x000000ff);
-}
-
-void OutputStream::write_i32_le(int32_t value)
-{
-    write_i8(value & 0x000000ff);
-    write_i8((value & 0x0000ff00) >> 8);
-    write_i8((value & 0x00ff0000) >> 16);
-    write_i8((value & 0xff000000) >> 24);
+    for (uint8_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
+        write_u8(value >> offset);
 }
 
 void BufferStream::write_u8(uint8_t value)
