@@ -1,10 +1,11 @@
 #pragma once
 
-#include <deque>
+#include <cstdint>
 #include <fstream>
 #include <istream>
-#include <ostream>
-#include <string>
+#include <sstream>
+
+long input_stream_size(std::istream& input_stream);
 
 class InputStream
 {
@@ -66,22 +67,21 @@ private:
 class BufferStream : public InputStream, public OutputStream
 {
 private:
-    std::deque<uint8_t> queue;
+    std::stringstream stream;
 
 public:
-    uint8_t peek_u8() override { return queue.front(); }
-    int8_t peek_i8() override { return queue.front(); }
+    uint8_t peek_u8() override { return stream.peek(); }
+    int8_t peek_i8() override { return stream.peek(); }
 
-    uint8_t read_u8() override;
-    int8_t read_i8() override;
+    uint8_t read_u8() override { return stream.get(); }
+    int8_t read_i8() override { return stream.get(); }
 
-    void write_u8(uint8_t value) override;
-    void write_i8(int8_t value) override;
+    void write_u8(uint8_t value) override { stream << value; }
+    void write_i8(int8_t value) override { stream << value; }
 
-    void clear() { queue.clear(); }
-    std::string as_string() const;
+    void clear() { stream.clear(); }
 
-    long size() override { return queue.size(); }
+    long size() override { return input_stream_size(stream); }
 };
 
 class InputFileStream : public InputStream
@@ -92,15 +92,16 @@ private:
 public:
     InputFileStream(const std::string& filename);
 
-    uint8_t read_u8() override { return input.get(); }
-    int8_t read_i8() override { return input.get(); }
     uint8_t peek_u8() override { return input.peek(); }
     int8_t peek_i8() override { return input.peek(); }
+
+    uint8_t read_u8() override { return input.get(); }
+    int8_t read_i8() override { return input.get(); }
 
     void close() { input.close(); }
     bool is_open() const { return input.is_open(); }
 
-    long size() override;
+    long size() override { return input_stream_size(input); }
 };
 
 class OutputFileStream : public OutputStream
@@ -111,8 +112,8 @@ private:
 public:
     OutputFileStream(const std::string& filename);
 
-    void write_u8(uint8_t value) override;
-    void write_i8(int8_t value) override;
+    void write_u8(uint8_t value) override { output << value; }
+    void write_i8(int8_t value) override { output << value; }
 
     void close() { output.close(); }
     bool is_open() const { return output.is_open(); }

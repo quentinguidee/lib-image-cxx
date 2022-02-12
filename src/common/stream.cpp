@@ -1,12 +1,26 @@
 #include "stream.hpp"
 
 #include <fstream>
-#include <iomanip>
 #include <ios>
 #include <ostream>
 #include <sstream>
 
 #include "bits.hpp"
+
+long input_stream_size(std::istream& input_stream)
+{
+    // TODO: Handle tellg error (if it returns -1).
+
+    long current_position = input_stream.tellg();
+
+    input_stream.seekg(0, std::ios::beg);
+    long begin = input_stream.tellg();
+    input_stream.seekg(0, std::ios::end);
+    long end = input_stream.tellg();
+    input_stream.seekg(current_position);
+
+    return end - begin;
+}
 
 uint32_t InputStream::read(uint8_t n_bytes)
 {
@@ -36,65 +50,10 @@ void OutputStream::write_le(uint8_t n_bytes, uint32_t value)
         write_u8(value >> offset);
 }
 
-void BufferStream::write_u8(uint8_t value)
-{
-    queue.push_back(value);
-}
-
-void BufferStream::write_i8(int8_t value)
-{
-    queue.push_back(value);
-}
-
-uint8_t BufferStream::read_u8()
-{
-    uint8_t value = queue.front();
-    queue.pop_front();
-    return value;
-}
-
-int8_t BufferStream::read_i8()
-{
-    int8_t value = queue.front();
-    queue.pop_front();
-    return value;
-}
-
-std::string BufferStream::as_string() const
-{
-    std::stringstream s;
-    for (auto it = queue.begin(); it != queue.end(); ++it)
-        s << std::setw(2) << std::setfill('0') << std::hex << (unsigned int)*it;
-    return s.str();
-}
-
 InputFileStream::InputFileStream(const std::string& filename) :
     input(std::ifstream(filename))
 {
     input.seekg(0, std::ios::beg);
-}
-
-long InputFileStream::size()
-{
-    // TODO: Handle tellg error (if it returns -1).
-
-    input.seekg(0, std::ios::beg);
-    long begin = input.tellg();
-    input.seekg(0, std::ios::end);
-    long end = input.tellg();
-    input.seekg(0, std::ios::beg);
-
-    return end - begin;
-}
-
-void OutputFileStream::write_u8(uint8_t value)
-{
-    output << value;
-}
-
-void OutputFileStream::write_i8(int8_t value)
-{
-    output << value;
 }
 
 OutputFileStream::OutputFileStream(const std::string& filename) :
