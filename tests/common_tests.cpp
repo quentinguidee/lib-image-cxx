@@ -35,14 +35,23 @@ TEST(CommonTest, BufferStream)
     EXPECT_EQ(stream.read_i8(), -4);
     EXPECT_EQ(stream.peek_i8(), 127);
     EXPECT_EQ(stream.read_i8(), 127);
+    EXPECT_EQ(stream.peek_u16(), 30000);
     EXPECT_EQ(stream.read_u16(), 30000);
+    EXPECT_EQ(stream.peek_i16(), -25000);
     EXPECT_EQ(stream.read_i16(), -25000);
+    EXPECT_EQ(stream.peek_u16(), 0x1234);
     EXPECT_EQ(stream.read_u16(), 0x1234);
+    EXPECT_EQ(stream.peek_u16(), 0x3412);
     EXPECT_EQ(stream.read_u16(), 0x3412);
+    EXPECT_EQ(stream.peek_u32(), 4000000000);
     EXPECT_EQ(stream.read_u32(), 4000000000);
+    EXPECT_EQ(stream.peek_i32(), 2000000000);
     EXPECT_EQ(stream.read_i32(), 2000000000);
+    EXPECT_EQ(stream.peek_i32(), -2000000000);
     EXPECT_EQ(stream.read_i32(), -2000000000);
+    EXPECT_EQ(stream.peek_i32(), 0x12345678);
     EXPECT_EQ(stream.read_i32(), 0x12345678);
+    EXPECT_EQ(stream.peek_u32(), 0x78563412);
     EXPECT_EQ(stream.read_u32(), 0x78563412);
 }
 

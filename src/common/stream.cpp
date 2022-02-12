@@ -39,6 +39,20 @@ long InputStream::remaining_size()
     return end - current_position;
 }
 
+uint32_t InputStream::peek(uint8_t n_bytes)
+{
+    uint32_t value = read(n_bytes);
+    get_input_stream().seekg(-n_bytes, std::ios::cur);
+    return value;
+}
+
+uint32_t InputStream::peek_le(uint8_t n_bytes)
+{
+    uint32_t value = read_le(n_bytes);
+    get_input_stream().seekg(-n_bytes, std::ios::cur);
+    return value;
+}
+
 uint32_t InputStream::read(uint8_t n_bytes)
 {
     uint32_t value = 0;

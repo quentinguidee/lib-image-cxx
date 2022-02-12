@@ -10,22 +10,33 @@ class InputStream
 public:
     uint8_t peek_u8() { return get_input_stream().peek(); }
     int8_t peek_i8() { return get_input_stream().peek(); }
-
     uint8_t read_u8() { return get_input_stream().get(); }
     int8_t read_i8() { return get_input_stream().get(); }
 
+    uint16_t peek_u16() { return peek(2); }
+    uint16_t peek_u16_le() { return peek_le(2); }
     uint16_t read_u16() { return read(2); }
     uint16_t read_u16_le() { return read_le(2); }
+    int16_t peek_i16() { return peek(2); }
+    int16_t peek_i16_le() { return peek_le(2); }
     int16_t read_i16() { return read(2); }
     int16_t read_i16_le() { return read_le(2); }
 
+    uint32_t peek_u24() { return peek(3); }
+    uint32_t peek_u24_le() { return peek_le(3); }
     uint32_t read_u24() { return read(3); }
     uint32_t read_u24_le() { return read_le(3); }
+    int32_t peek_i24() { return peek(3); }
+    int32_t peek_i24_le() { return peek_le(3); }
     int32_t read_i24() { return read(3); }
     int32_t read_i24_le() { return read_le(3); }
 
+    uint32_t peek_u32() { return peek(4); }
+    uint32_t peek_u32_le() { return peek_le(4); }
     uint32_t read_u32() { return read(4); }
     uint32_t read_u32_le() { return read_le(4); }
+    int32_t peek_i32() { return peek(4); }
+    int32_t peek_i32_le() { return peek_le(4); }
     int32_t read_i32() { return read(4); }
     int32_t read_i32_le() { return read_le(4); }
 
@@ -35,6 +46,8 @@ public:
     virtual std::istream& get_input_stream() = 0;
 
 private:
+    uint32_t peek(uint8_t n_bytes);
+    uint32_t peek_le(uint8_t n_bytes);
     uint32_t read(uint8_t n_bytes);
     uint32_t read_le(uint8_t n_bytes);
 };
