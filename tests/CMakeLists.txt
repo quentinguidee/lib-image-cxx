@@ -1,10 +1,13 @@
-set(SOURCES
-    common_tests.cpp
-    bmp_tests.cpp
-    qoi_tests.cpp
+set(HEADERS
+    conversion_common.hpp
 )
 
-add_executable(tests ${SOURCES})
+set(SOURCES
+    common_tests.cpp
+    conversion_tests.cpp
+)
+
+add_executable(tests ${HEADERS} ${SOURCES})
 
 target_link_libraries(tests
     image
