@@ -16,6 +16,7 @@
 #include "image_widget_bmp.hpp"
 #include "image_widget_qoi.hpp"
 #include "imgui.h"
+#include "qoi_decoder.hpp"
 #include "qoi_format.hpp"
 #include "raw_image.hpp"
 
