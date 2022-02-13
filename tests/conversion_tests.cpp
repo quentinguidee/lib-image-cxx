@@ -2,6 +2,8 @@
 #include "bmp_encoder.hpp"
 #include "conversion_common.hpp"
 #include "gtest/gtest.h"
+#include "png_decoder.hpp"
+#include "png_encoder.hpp"
 #include "qoi_decoder.hpp"
 #include "qoi_encoder.hpp"
 
@@ -17,3 +19,5 @@ TEST_ENCODE_AND_DECODE(BMP, "image_1_small_16bpp_x1r5g5b5.bmp", 16bppX1R5G5B5);
 TEST_ENCODE_AND_DECODE(BMP, "image_1_small_24bpp_r8g8b8.bmp", 24bppR8G8B8);
 TEST_ENCODE_AND_DECODE(BMP, "image_1_small_32bpp_a8r8g8b8.bmp", 32bppA8R8G8B8);
 TEST_ENCODE_AND_DECODE(BMP, "image_1_small_32bpp_x8r8g8b8.bmp", 32bppX8R8G8B8);
+
+TEST_ENCODE_AND_DECODE(PNG, "image_1.png", Default);

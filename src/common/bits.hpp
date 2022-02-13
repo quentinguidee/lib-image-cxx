@@ -29,3 +29,5 @@ T generate_bitmask(uint8_t number_of_set_bits)
 {
     return (1 << number_of_set_bits) - 1;
 }
+
+uint8_t reverse_byte(uint8_t value);

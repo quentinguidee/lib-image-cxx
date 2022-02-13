@@ -1,6 +1,7 @@
 set(HEADERS
     bits.hpp
     decoder.hpp
+    deflate_compressor.hpp
     exceptions.hpp
     format.hpp
     log.hpp
@@ -10,6 +11,8 @@ set(HEADERS
 )
 
 set(SOURCES
+    bits.cpp
+    deflate_compressor.cpp
     pixel.cpp
     raw_image.cpp
     stream.cpp

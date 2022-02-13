@@ -1,5 +1,6 @@
 set(HEADERS
     image_widget_bmp.hpp
+    image_widget_png.hpp
     image_widget_qoi.hpp
     image_widget.hpp
     app.hpp
@@ -7,6 +8,7 @@ set(HEADERS
 
 set(SOURCES
     image_widget_bmp.cpp
+    image_widget_png.cpp
     image_widget_qoi.cpp
     image_widget.cpp
     main.cpp
