@@ -19,6 +19,6 @@ uint32_t BMP::float2_30_to_uint32(BMP::float2_30_t value)
 BMP::Bitmask::Bitmask(uint32_t value) :
     value(value),
     offset(first_bit_set(value)),
-    divider(pow(2, count_set_bits(value)) - 1)
+    divider(generate_bitmask<double>(count_set_bits(value)))
 {
 }

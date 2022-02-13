@@ -23,3 +23,9 @@ uint8_t first_bit_set(T value)
 {
     return log2((~value + 1) & value);
 }
+
+template <typename T>
+T generate_bitmask(uint8_t number_of_set_bits)
+{
+    return (1 << number_of_set_bits) - 1;
+}

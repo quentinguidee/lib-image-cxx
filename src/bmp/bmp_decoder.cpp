@@ -1,9 +1,9 @@
 #include "bmp_decoder.hpp"
 
-#include <cmath>
 #include <iostream>
 #include <string>
 
+#include "bits.hpp"
 #include "bmp_common.hpp"
 #include "exceptions.hpp"
 #include "log.hpp"
@@ -177,7 +177,7 @@ void BMP::Decoder::decode_pixel_array_up_to_4_bpp()
 {
     const uint16_t BPP = (uint16_t)settings.bit_count;
     const int8_t BASE_OFFSET = 8 - BPP;
-    const uint8_t BITMASK = pow(2, BPP) - 1;
+    const uint8_t BITMASK = generate_bitmask<uint8_t>(BPP);
 
     for (uint32_t y = 0; y < image.height; ++y)
     {
