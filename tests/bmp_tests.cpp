@@ -7,10 +7,16 @@
 #include "raw_image.hpp"
 #include "stream.hpp"
 
+#define TEST_BMP_ENCODING_DECODING(NAMESPACE, FILENAME, NAME) \
+    TEST(NAMESPACE##Test, NAMESPACE##Conversion##NAME)        \
+    {                                                         \
+        convert_bmp_to_bmp(FILENAME);                         \
+    }
+
 void convert_bmp_to_bmp(const std::string& filename)
 {
-    std::string input_path = "../test_images/" + filename + ".bmp";
-    std::string output_path = "../test_images/out_" + filename + ".bmp";
+    std::string input_path = "../test_images/" + filename;
+    std::string output_path = "../test_images/out_" + filename;
 
     InputFileStream in(input_path);
 
@@ -36,59 +42,18 @@ void convert_bmp_to_bmp(const std::string& filename)
     std::ifstream original(input_path);
     std::ifstream exported(output_path);
     for (int count = 0; !original.eof() && !exported.eof(); ++count)
-    {
-        ASSERT_EQ(original.get(), exported.get()) << "Count = " << count;
-    }
+        ASSERT_EQ(original.get(), exported.get()) << "Different byte at position " << count;
 
     std::remove(output_path.c_str());
 }
 
-TEST(BMPTest, BMPConversionDefault)
-{
-    convert_bmp_to_bmp("image_1");
-}
-
-TEST(BMPTest, BMPConversion2bppX8R8G8B8)
-{
-    convert_bmp_to_bmp("image_1_small_2bpp_x8r8g8b8");
-}
-
-TEST(BMPTest, BMPConversion4bppX8R8G8B8)
-{
-    convert_bmp_to_bmp("image_1_small_4bpp_x8r8g8b8");
-}
-
-TEST(BMPTest, BMPConversion8bppX8R8G8B8)
-{
-    convert_bmp_to_bmp("image_1_small_8bpp_x8r8g8b8");
-}
-
-TEST(BMPTest, BMPConversion16bppR5G6B5)
-{
-    convert_bmp_to_bmp("image_1_small_16bpp_r5g6b5");
-}
-
-TEST(BMPTest, BMPConversion16bppA1R5G5B5)
-{
-    convert_bmp_to_bmp("image_1_small_16bpp_a1r5g5b5");
-}
-
-TEST(BMPTest, BMPConversion16bppX1R5G5B5)
-{
-    convert_bmp_to_bmp("image_1_small_16bpp_x1r5g5b5");
-}
-
-TEST(BMPTest, BMPConversion24bppR8G8B8)
-{
-    convert_bmp_to_bmp("image_1_small_24bpp_r8g8b8");
-}
-
-TEST(BMPTest, BMPConversion32bppA8R8G8B8)
-{
-    convert_bmp_to_bmp("image_1_small_32bpp_a8r8g8b8");
-}
-
-TEST(BMPTest, BMPConversion32bppX8R8G8B8)
-{
-    convert_bmp_to_bmp("image_1_small_32bpp_x8r8g8b8");
-}
+TEST_BMP_ENCODING_DECODING(BMP, "image_1.bmp", Default);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_2bpp_x8r8g8b8.bmp", 2bppX8R8G8B8);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_4bpp_x8r8g8b8.bmp", 4bppX8R8G8B8);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_8bpp_x8r8g8b8.bmp", 8bppX8R8G8B8);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_16bpp_r5g6b5.bmp", 16bppR5G6B5);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_16bpp_a1r5g5b5.bmp", 16bppA1R5G5B5);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_16bpp_x1r5g5b5.bmp", 16bppX1R5G5B5);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_24bpp_r8g8b8.bmp", 24bppR8G8B8);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_32bpp_a8r8g8b8.bmp", 32bppA8R8G8B8);
+TEST_BMP_ENCODING_DECODING(BMP, "image_1_small_32bpp_x8r8g8b8.bmp", 32bppX8R8G8B8);
