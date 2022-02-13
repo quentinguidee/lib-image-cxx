@@ -269,12 +269,12 @@ void BMP::Decoder::decode_pixel_array_32_bpp()
 void BMP::Decoder::decode_one_pixel_bitmask(uint32_t value)
 {
     Pixel pixel(
-        ((value & settings.bitmask_r.value) >> settings.bitmask_r.offset) / settings.bitmask_r.divider * 255,
-        ((value & settings.bitmask_g.value) >> settings.bitmask_g.offset) / settings.bitmask_g.divider * 255,
-        ((value & settings.bitmask_b.value) >> settings.bitmask_b.offset) / settings.bitmask_b.divider * 255);
+        ((value & settings.bitmask_r.value) >> settings.bitmask_r.offset) * (255 / settings.bitmask_r.divider),
+        ((value & settings.bitmask_g.value) >> settings.bitmask_g.offset) * (255 / settings.bitmask_g.divider),
+        ((value & settings.bitmask_b.value) >> settings.bitmask_b.offset) * (255 / settings.bitmask_b.divider));
 
     if (settings.bitmask_a.value != 0)
-        pixel.a = ((value & settings.bitmask_a.value) >> settings.bitmask_a.offset) / settings.bitmask_a.divider * 255;
+        pixel.a = ((value & settings.bitmask_a.value) >> settings.bitmask_a.offset) * (255 / settings.bitmask_a.divider);
 
     image.pixels.push_back(pixel);
 }
