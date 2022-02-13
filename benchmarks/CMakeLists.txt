@@ -1,8 +1,12 @@
-set(SOURCES
-    qoi_benchmark.cpp
+set(HEADERS
+    common.hpp
 )
 
-add_executable(benchmarks ${SOURCES})
+set(SOURCES
+    benchmarks.cpp
+)
+
+add_executable(benchmarks ${HEADERS} ${SOURCES})
 
 target_link_libraries(benchmarks
     image
