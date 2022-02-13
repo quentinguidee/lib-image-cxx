@@ -23,6 +23,7 @@ public:
 
     Settings get_settings() const { return settings; }
 
+private:
     void decode_header();
     uint8_t decode_index();
     void decode_diff(Pixel &current_pixel);

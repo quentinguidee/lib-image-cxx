@@ -20,6 +20,7 @@ public:
 
     void set_settings(const Settings &settings) { this->settings = settings; }
 
+private:
     void encode_header() const;
     void encode_index(uint8_t index) const;
     void encode_diff(int8_t diff_r, int8_t diff_g, int8_t diff_b) const;
