@@ -234,14 +234,13 @@ void BMP::Encoder::encode_pixel_array_16_bpp()
     {
         for (uint32_t x = 0; x < image.width; ++x)
         {
-            const Pixel& pixel = image.get_pixel(x, y);
+            uint16_t value = pixel_to_value<uint16_t>(
+                image.get_pixel(x, y),
+                settings.bitmask_r,
+                settings.bitmask_g,
+                settings.bitmask_b,
+                settings.bitmask_a);
 
-            uint16_t value = 0;
-            value |= ((uint16_t)round(pixel.r * settings.bitmask_r.divider / 255) << settings.bitmask_r.offset) & settings.bitmask_r.value;
-            value |= ((uint16_t)round(pixel.g * settings.bitmask_g.divider / 255) << settings.bitmask_g.offset) & settings.bitmask_g.value;
-            value |= ((uint16_t)round(pixel.b * settings.bitmask_b.divider / 255) << settings.bitmask_b.offset) & settings.bitmask_b.value;
-            if (settings.bitmask_a.value != 0)
-                value |= ((uint16_t)round(pixel.a * settings.bitmask_a.divider / 255) << settings.bitmask_a.offset) & settings.bitmask_a.value;
             out.write_u16_le(value);
         }
 
@@ -277,14 +276,13 @@ void BMP::Encoder::encode_pixel_array_32_bpp()
 
     for (uint32_t i = 0; i < image.width * image.height; ++i)
     {
-        const Pixel& pixel = image.pixels[i];
+        uint32_t value = pixel_to_value<uint32_t>(
+            image.pixels[i],
+            settings.bitmask_r,
+            settings.bitmask_g,
+            settings.bitmask_b,
+            settings.bitmask_a);
 
-        uint32_t value = 0;
-        value |= ((uint32_t)round(pixel.r * settings.bitmask_r.divider / 255) << settings.bitmask_r.offset) & settings.bitmask_r.value;
-        value |= ((uint32_t)round(pixel.g * settings.bitmask_g.divider / 255) << settings.bitmask_g.offset) & settings.bitmask_g.value;
-        value |= ((uint32_t)round(pixel.b * settings.bitmask_b.divider / 255) << settings.bitmask_b.offset) & settings.bitmask_b.value;
-        if (settings.bitmask_a.value != 0)
-            value |= ((uint32_t)round(pixel.a * settings.bitmask_a.divider / 255) << settings.bitmask_a.offset) & settings.bitmask_a.value;
         out.write_u32_le(value);
     }
 }

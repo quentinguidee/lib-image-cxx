@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 
+#include "pixel.hpp"
 #include "stream.hpp"
 
 namespace BMP {
@@ -104,5 +106,17 @@ struct Bitmask
 
     Bitmask(uint32_t value = 0);
 };
+
+template <typename T>
+T pixel_to_value(const Pixel& pixel, const Bitmask& bitmask_r, const Bitmask& bitmask_g, const Bitmask& bitmask_b, const Bitmask& bitmask_a)
+{
+    T value = 0;
+    value |= ((T)round(pixel.r * (bitmask_r.divider / 255)) << bitmask_r.offset) & bitmask_r.value;
+    value |= ((T)round(pixel.g * (bitmask_g.divider / 255)) << bitmask_g.offset) & bitmask_g.value;
+    value |= ((T)round(pixel.b * (bitmask_b.divider / 255)) << bitmask_b.offset) & bitmask_b.value;
+    if (bitmask_a.value != 0)
+        value |= ((T)round(pixel.a * (bitmask_a.divider / 255)) << bitmask_a.offset) & bitmask_a.value;
+    return value;
+}
 
 }
