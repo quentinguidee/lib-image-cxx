@@ -3,6 +3,7 @@ set(HEADERS
     qoi_decoder.hpp
     qoi_format.hpp
     qoi_encoder.hpp
+    qoi_settings.hpp
 )
 
 set(SOURCES

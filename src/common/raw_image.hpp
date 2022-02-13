@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include "channels.hpp"
-#include "colorspace.hpp"
 #include "decoder.hpp"
 #include "encoder.hpp"
 #include "pixel.hpp"
@@ -14,8 +12,6 @@ struct RawImage
     Pixels pixels;
 
     uint32_t width = 0, height = 0;
-    Colorspace colorspace;
-    Channels channels;
 
     RawImage() {}
 

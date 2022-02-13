@@ -1,6 +1,7 @@
 #pragma once
 
 #include "qoi_common.hpp"
+#include "qoi_settings.hpp"
 #include "raw_image.hpp"
 #include "stream.hpp"
 
@@ -8,11 +9,16 @@ namespace QOI {
 
 class Encoder final : public BaseEncoder
 {
+private:
+    Settings settings;
+
 public:
     Encoder(OutputStream &out, RawImage &image) :
         BaseEncoder(out, image) {}
 
     void encode() override;
+
+    void set_settings(const Settings &settings) { this->settings = settings; }
 
     void encode_header() const;
     void encode_index(uint8_t index) const;

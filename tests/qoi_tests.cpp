@@ -18,18 +18,17 @@ TEST(QOITest, QOIConversion)
     EXPECT_TRUE(QOI::Decoder::can_decode(in));
 
     RawImage image = RawImage();
-    QOI::Decoder(in, image).decode();
-
-    EXPECT_EQ(image.width, 1920);
-    EXPECT_EQ(image.height, 1139);
-    EXPECT_EQ(image.pixels.size(), image.width * image.height);
-    EXPECT_EQ(image.channels, Channels::RGBA);
+    QOI::Decoder decoder(in, image);
+    decoder.decode();
+    QOI::Settings settings = decoder.get_settings();
 
     OutputFileStream out("../test_images/image_1_out.qoi");
 
     ASSERT_TRUE(out.is_open());
 
-    QOI::Encoder(out, image).encode();
+    QOI::Encoder encoder(out, image);
+    encoder.set_settings(settings);
+    encoder.encode();
 
     out.close();
 

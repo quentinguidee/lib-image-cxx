@@ -1,7 +1,5 @@
 set(HEADERS
     bits.hpp
-    channels.hpp
-    colorspace.hpp
     decoder.hpp
     exceptions.hpp
     format.hpp

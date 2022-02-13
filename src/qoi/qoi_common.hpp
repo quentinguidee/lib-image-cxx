@@ -18,4 +18,16 @@ constexpr uint8_t RUN_TAG = 0xc0;
 
 uint8_t hash_pixel(const Pixel& pixel);
 
+enum class Colorspace
+{
+    SRGB,
+    LINEAR,
+};
+
+enum class Channels
+{
+    RGB,
+    RGBA,
+};
+
 }

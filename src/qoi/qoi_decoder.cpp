@@ -47,21 +47,21 @@ void QOI::Decoder::decode()
     }
 }
 
-void QOI::Decoder::decode_header() const
+void QOI::Decoder::decode_header()
 {
     in.read_u32();
     image.width = in.read_u32();
     image.height = in.read_u32();
-    image.channels = in.read_u8() == 3 ? Channels::RGB : Channels::RGBA;
-    image.colorspace = in.read_u8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
+    settings.channels = in.read_u8() == 3 ? Channels::RGB : Channels::RGBA;
+    settings.colorspace = in.read_u8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
 }
 
-uint8_t QOI::Decoder::decode_index() const
+uint8_t QOI::Decoder::decode_index()
 {
     return in.read_u8();
 }
 
-void QOI::Decoder::decode_diff(Pixel &pixel) const
+void QOI::Decoder::decode_diff(Pixel &pixel)
 {
     uint8_t value = in.read_u8();
 
@@ -74,7 +74,7 @@ void QOI::Decoder::decode_diff(Pixel &pixel) const
     pixel.b += diff_b - 2;
 }
 
-void QOI::Decoder::decode_luma(Pixel &pixel) const
+void QOI::Decoder::decode_luma(Pixel &pixel)
 {
     uint8_t value = in.read_u8();
     uint8_t diff_g = value & 0x3f;
@@ -88,7 +88,7 @@ void QOI::Decoder::decode_luma(Pixel &pixel) const
     pixel.b += (diff_g - 32) + (diff_b_g - 8);
 }
 
-void QOI::Decoder::decode_rgb(Pixel &pixel) const
+void QOI::Decoder::decode_rgb(Pixel &pixel)
 {
     in.read_u8();
     pixel.r = in.read_u8();
@@ -96,7 +96,7 @@ void QOI::Decoder::decode_rgb(Pixel &pixel) const
     pixel.b = in.read_u8();
 }
 
-void QOI::Decoder::decode_rgba(Pixel &pixel) const
+void QOI::Decoder::decode_rgba(Pixel &pixel)
 {
     in.read_u8();
     pixel.r = in.read_u8();
@@ -105,7 +105,7 @@ void QOI::Decoder::decode_rgba(Pixel &pixel) const
     pixel.a = in.read_u8();
 }
 
-uint8_t QOI::Decoder::decode_run() const
+uint8_t QOI::Decoder::decode_run()
 {
     return in.read_u8() & 0x3f;
 }

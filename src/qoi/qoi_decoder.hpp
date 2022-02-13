@@ -2,6 +2,7 @@
 
 #include "decoder.hpp"
 #include "qoi_common.hpp"
+#include "qoi_settings.hpp"
 #include "raw_image.hpp"
 #include "stream.hpp"
 
@@ -9,6 +10,9 @@ namespace QOI {
 
 class Decoder final : public BaseDecoder
 {
+private:
+    Settings settings;
+
 public:
     Decoder(InputStream &in, RawImage &image) :
         BaseDecoder(in, image) {}
@@ -17,13 +21,15 @@ public:
 
     void decode() override;
 
-    void decode_header() const;
-    uint8_t decode_index() const;
-    void decode_diff(Pixel &current_pixel) const;
-    void decode_luma(Pixel &current_pixel) const;
-    void decode_rgb(Pixel &pixel) const;
-    void decode_rgba(Pixel &pixel) const;
-    uint8_t decode_run() const;
+    Settings get_settings() const { return settings; }
+
+    void decode_header();
+    uint8_t decode_index();
+    void decode_diff(Pixel &current_pixel);
+    void decode_luma(Pixel &current_pixel);
+    void decode_rgb(Pixel &pixel);
+    void decode_rgba(Pixel &pixel);
+    uint8_t decode_run();
 };
 
 }

@@ -81,8 +81,8 @@ void QOI::Encoder::encode_header() const
     out.write_u32(HEADER_MAGIC);
     out.write_u32(image.width);
     out.write_u32(image.height);
-    out.write_u8(image.channels == Channels::RGB ? 3 : 4);
-    out.write_u8(image.colorspace == Colorspace::SRGB ? 0 : 1);
+    out.write_u8(settings.channels == Channels::RGB ? 3 : 4);
+    out.write_u8(settings.colorspace == Colorspace::SRGB ? 0 : 1);
 }
 
 void QOI::Encoder::encode_index(uint8_t index) const
