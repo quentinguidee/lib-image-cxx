@@ -50,7 +50,6 @@ public:
 
     virtual std::istream& get_input_stream() = 0;
 
-private:
     template <typename T>
     T peek(uint8_t n_bytes)
     {
@@ -109,7 +108,6 @@ public:
 
     virtual std::ostream& get_output_stream() = 0;
 
-private:
     template <typename T>
     void write(uint8_t n_bytes, T value)
     {
