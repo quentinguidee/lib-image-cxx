@@ -22,10 +22,11 @@ static void test_write(OutputStream& out)
     out.write_i24(0xABCDEF);
     out.write_u32(0x12345678);
     out.write_u32_le(0x12345678);
+    out.write<uint64_t>(8, 0xFEDCBA9876543210);
 }
 static void test_read(InputStream& in)
 {
-    EXPECT_EQ(in.size(), 36);
+    EXPECT_EQ(in.size(), 44);
 
     EXPECT_EQ(in.peek_u8(), 0);
     EXPECT_EQ(in.read_u8(), 0);
@@ -57,6 +58,7 @@ static void test_read(InputStream& in)
     EXPECT_EQ(in.read_i32(), 0x12345678);
     EXPECT_EQ(in.peek_u32(), 0x78563412);
     EXPECT_EQ(in.read_u32(), 0x78563412);
+    EXPECT_EQ(in.read<uint64_t>(8), 0xFEDCBA9876543210);
 }
 
 TEST(CommonTest, BufferStream)

@@ -70,8 +70,8 @@ public:
     T read(uint8_t n_bytes)
     {
         T value = 0;
-        for (int8_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
-            value |= read_u8() << offset;
+        for (int16_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
+            value |= (T)read_u8() << offset;
         return value;
     }
 
@@ -79,8 +79,8 @@ public:
     T read_le(uint8_t n_bytes)
     {
         T value = 0;
-        for (uint8_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
-            value |= read_u8() << offset;
+        for (uint16_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
+            value |= (T)read_u8() << offset;
         return value;
     }
 };
@@ -111,14 +111,14 @@ public:
     template <typename T>
     void write(uint8_t n_bytes, T value)
     {
-        for (int8_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
+        for (int16_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
             write_u8(value >> offset);
     }
 
     template <typename T>
     void write_le(uint8_t n_bytes, T value)
     {
-        for (uint8_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
+        for (uint16_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
             write_u8(value >> offset);
     }
 };
