@@ -21,3 +21,6 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ColumnLimit: 0
 
 FixNamespaceComments: false
+
+Cpp11BracedListStyle: false
+SpaceBeforeCpp11BracedList: true

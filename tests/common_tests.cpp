@@ -70,12 +70,12 @@ TEST(CommonTest, BufferStream)
 
 TEST(CommonTest, FileStream)
 {
-    OutputFileStream out("temporary_stream_test");
+    OutputFileStream out { "temporary_stream_test" };
     ASSERT_TRUE(out.is_open());
     test_write(out);
     out.close();
 
-    InputFileStream in("temporary_stream_test");
+    InputFileStream in { "temporary_stream_test" };
     ASSERT_TRUE(in.is_open());
     test_read(in);
     in.close();

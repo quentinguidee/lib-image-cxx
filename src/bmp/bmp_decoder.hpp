@@ -17,7 +17,7 @@ private:
 
 public:
     Decoder(InputStream &in, RawImage &image) :
-        BaseDecoder(in, image) {}
+        BaseDecoder { in, image } {}
 
     static bool can_decode(InputStream &in);
 

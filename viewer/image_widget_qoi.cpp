@@ -3,7 +3,7 @@
 #include "qoi_decoder.hpp"
 
 Viewer::QOIImageWidget::QOIImageWidget(InputStream& in, const std::string& filename) :
-    ImageWidget(filename)
+    ImageWidget { filename }
 {
-    QOI::Decoder(in, raw_image).decode();
+    QOI::Decoder { in, raw_image }.decode();
 }

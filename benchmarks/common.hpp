@@ -20,9 +20,9 @@
 template <typename Decoder>
 RawImage decode(const std::string& filename)
 {
-    InputFileStream in(TEST_IMAGES_PATH + filename);
+    InputFileStream in { TEST_IMAGES_PATH + filename };
 
-    RawImage image = RawImage();
+    RawImage image;
     Decoder(in, image).decode();
 
     return image;
@@ -31,7 +31,7 @@ RawImage decode(const std::string& filename)
 template <typename Encoder>
 Encoder encode(const std::string& filename, RawImage& image)
 {
-    OutputFileStream out(TEST_IMAGES_PATH + filename);
+    OutputFileStream out { TEST_IMAGES_PATH + filename };
     Encoder encoder(out, image);
     encoder.encode();
 
@@ -48,7 +48,7 @@ void BM_decode(benchmark::State& state, const std::string& filename)
 template <typename Decoder, typename Encoder>
 void BM_encode(benchmark::State& state, const std::string& filename)
 {
-    std::string output_filename = "temp_" + filename;
+    std::string output_filename { "temp_" + filename };
 
     RawImage image = decode<Decoder>(filename);
 

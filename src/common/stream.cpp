@@ -50,12 +50,12 @@ long InputStream::remaining_size()
 }
 
 InputFileStream::InputFileStream(const std::string& filename) :
-    input(std::ifstream(filename))
+    input { std::ifstream { filename } }
 {
     input.seekg(0, std::ios::beg);
 }
 
 OutputFileStream::OutputFileStream(const std::string& filename) :
-    output(std::ofstream(filename))
+    output { std::ofstream { filename } }
 {
 }

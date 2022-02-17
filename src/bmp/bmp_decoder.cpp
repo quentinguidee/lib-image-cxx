@@ -41,7 +41,7 @@ void BMP::Decoder::decode()
             decode_info_header_v5();
             break;
         default:
-            throw UnsupportedVersionException("Cannot decode headers of size " + std::to_string(header_size) + ".");
+            throw UnsupportedVersionException { "Cannot decode headers of size " + std::to_string(header_size) + "." };
     }
 
     decode_color_table();
@@ -221,10 +221,10 @@ void BMP::Decoder::decode_pixel_array_16_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
-        settings.bitmask_a = Bitmask(0b0000000000000000);
-        settings.bitmask_r = Bitmask(0b0000000000111110);
-        settings.bitmask_g = Bitmask(0b0000011111000000);
-        settings.bitmask_b = Bitmask(0b1111100000000000);
+        settings.bitmask_a = { 0b0000000000000000 };
+        settings.bitmask_r = { 0b0000000000111110 };
+        settings.bitmask_g = { 0b0000011111000000 };
+        settings.bitmask_b = { 0b1111100000000000 };
     }
 
     for (uint32_t y = 0; y < image.height; ++y)
@@ -240,7 +240,7 @@ void BMP::Decoder::decode_pixel_array_16_bpp()
 void BMP::Decoder::decode_pixel_array_24_bpp()
 {
     if (settings.compression == Compression::BITFIELDS)
-        throw DecodeException("The bitfields compression method is not allowed for 24bpp images.");
+        throw DecodeException { "The bitfields compression method is not allowed for 24bpp images." };
 
     for (uint32_t y = 0; y < image.height; ++y)
     {
@@ -256,10 +256,10 @@ void BMP::Decoder::decode_pixel_array_32_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
-        settings.bitmask_a = Bitmask(0x00000000);
-        settings.bitmask_r = Bitmask(0x0000ff00);
-        settings.bitmask_g = Bitmask(0x00ff0000);
-        settings.bitmask_b = Bitmask(0xff000000);
+        settings.bitmask_a = { 0x00000000 };
+        settings.bitmask_r = { 0x0000ff00 };
+        settings.bitmask_g = { 0x00ff0000 };
+        settings.bitmask_b = { 0xff000000 };
     }
 
     for (uint32_t i = 0; i < image.width * image.height; ++i)
@@ -268,10 +268,11 @@ void BMP::Decoder::decode_pixel_array_32_bpp()
 
 void BMP::Decoder::decode_one_pixel_bitmask(uint32_t value)
 {
-    Pixel pixel(
-        ((value & settings.bitmask_r.value) >> settings.bitmask_r.offset) * (255 / settings.bitmask_r.divider),
-        ((value & settings.bitmask_g.value) >> settings.bitmask_g.offset) * (255 / settings.bitmask_g.divider),
-        ((value & settings.bitmask_b.value) >> settings.bitmask_b.offset) * (255 / settings.bitmask_b.divider));
+    Pixel pixel {
+        (uint8_t)(((value & settings.bitmask_r.value) >> settings.bitmask_r.offset) * (255 / settings.bitmask_r.divider)),
+        (uint8_t)(((value & settings.bitmask_g.value) >> settings.bitmask_g.offset) * (255 / settings.bitmask_g.divider)),
+        (uint8_t)(((value & settings.bitmask_b.value) >> settings.bitmask_b.offset) * (255 / settings.bitmask_b.divider)),
+    };
 
     if (settings.bitmask_a.value != 0)
         pixel.a = ((value & settings.bitmask_a.value) >> settings.bitmask_a.offset) * (255 / settings.bitmask_a.divider);

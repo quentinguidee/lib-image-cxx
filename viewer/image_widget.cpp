@@ -14,7 +14,7 @@ constexpr const float Viewer::ImageWidget::ZOOM_LEVELS_VALUES[];
 constexpr const char* Viewer::ImageWidget::ZOOM_LEVELS_LABELS[];
 
 Viewer::ImageWidget::ImageWidget(const std::string& filename) :
-    filename(filename)
+    filename { filename }
 {
 }
 

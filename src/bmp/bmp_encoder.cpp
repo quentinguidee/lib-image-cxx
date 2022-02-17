@@ -41,7 +41,7 @@ void BMP::Encoder::encode()
             encode_info_header_v5();
             break;
         default:
-            throw UnsupportedVersionException("Cannot encode headers of size " + std::to_string(header_size) + ".");
+            throw UnsupportedVersionException { "Cannot encode headers of size " + std::to_string(header_size) + "." };
     }
 
     encode_color_table();
@@ -224,10 +224,10 @@ void BMP::Encoder::encode_pixel_array_16_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
-        settings.bitmask_a = Bitmask(0b0000000000000000);
-        settings.bitmask_r = Bitmask(0b0000000000111110);
-        settings.bitmask_g = Bitmask(0b0000011111000000);
-        settings.bitmask_b = Bitmask(0b1111100000000000);
+        settings.bitmask_a = { 0b0000000000000000 };
+        settings.bitmask_r = { 0b0000000000111110 };
+        settings.bitmask_g = { 0b0000011111000000 };
+        settings.bitmask_b = { 0b1111100000000000 };
     }
 
     for (uint32_t y = 0; y < image.height; ++y)
@@ -252,7 +252,7 @@ void BMP::Encoder::encode_pixel_array_16_bpp()
 void BMP::Encoder::encode_pixel_array_24_bpp()
 {
     if (settings.compression == Compression::BITFIELDS)
-        throw std::runtime_error("The bitfields compression method is not allowed for 24bpp images.");
+        throw std::runtime_error { "The bitfields compression method is not allowed for 24bpp images." };
 
     for (uint32_t y = 0; y < image.height; ++y)
     {
@@ -268,10 +268,10 @@ void BMP::Encoder::encode_pixel_array_32_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
-        settings.bitmask_a = Bitmask(0x00000000);
-        settings.bitmask_r = Bitmask(0x0000ff00);
-        settings.bitmask_g = Bitmask(0x00ff0000);
-        settings.bitmask_b = Bitmask(0xff000000);
+        settings.bitmask_a = { 0x00000000 };
+        settings.bitmask_r = { 0x0000ff00 };
+        settings.bitmask_g = { 0x00ff0000 };
+        settings.bitmask_b = { 0xff000000 };
     }
 
     for (uint32_t i = 0; i < image.width * image.height; ++i)
@@ -326,6 +326,6 @@ void BMP::Encoder::generate_colors_table_indexes()
     {
         const Pixel& pixel = settings.colors_table[i];
         const uint32_t hash = (pixel.r) + (pixel.g * 255) + (pixel.b * 255 * 255);
-        colors_table_indexes.insert({hash, i});
+        colors_table_indexes.insert({ hash, i });
     }
 }

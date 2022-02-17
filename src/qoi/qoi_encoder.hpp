@@ -10,11 +10,11 @@ namespace QOI {
 class Encoder final : public BaseEncoder
 {
 private:
-    Settings settings;
+    Settings settings {};
 
 public:
     Encoder(OutputStream &out, RawImage &image) :
-        BaseEncoder(out, image) {}
+        BaseEncoder { out, image } {}
 
     void encode() override;
 

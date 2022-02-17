@@ -5,9 +5,9 @@
 #include "bmp_format.hpp"
 #include "qoi_format.hpp"
 
-const std::unordered_map<std::string, Format> Formats::FORMATS{
-    {"qoi", QOI_FORMAT},
-    {"bmp", BMP_FORMAT},
+const std::unordered_map<std::string, Format> Formats::FORMATS {
+    { "qoi", QOI_FORMAT },
+    { "bmp", BMP_FORMAT },
 };
 
 const Format& Formats::get_by_id(const std::string& format_id)

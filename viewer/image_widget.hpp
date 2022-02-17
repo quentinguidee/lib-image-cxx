@@ -9,19 +9,19 @@ namespace Viewer {
 class ImageWidget
 {
 private:
-    bool image_loaded = false;
-    GLuint texture_id = 0;
+    bool image_loaded { false };
+    GLuint texture_id { 0 };
     std::string filename;
 
-    bool opened = true;
-    std::string widget_title;
+    bool opened { true };
+    std::string widget_title {};
 
-    std::string error_message;
+    std::string error_message {};
 
-    static constexpr const int ZOOM_LEVELS_COUNT = 5;
-    static constexpr const float ZOOM_LEVELS_VALUES[] = {0.25f, 0.5f, 1.0f, 1.5f, 2.0f};
-    static constexpr const char* ZOOM_LEVELS_LABELS[] = {"x0.25", "x0.5", "x1", "x1.5", "x2"};
-    int current_zoom_level_id = 0;
+    static constexpr const int ZOOM_LEVELS_COUNT { 5 };
+    static constexpr const float ZOOM_LEVELS_VALUES[] { 0.25f, 0.5f, 1.0f, 1.5f, 2.0f };
+    static constexpr const char* ZOOM_LEVELS_LABELS[] { "x0.25", "x0.5", "x1", "x1.5", "x2" };
+    int current_zoom_level_id { 0 };
 
 protected:
     RawImage raw_image;

@@ -2,8 +2,8 @@
 
 #include "format.hpp"
 
-static const Format BMP_FORMAT{
+static const Format BMP_FORMAT {
     "bmp",
     "Bitmap",
-    {"bmp"},
+    { "bmp" },
 };

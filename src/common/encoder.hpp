@@ -13,7 +13,7 @@ protected:
 
 public:
     BaseEncoder(OutputStream& out, RawImage& image) :
-        out(out), image(image) {}
+        out { out }, image { image } {}
 
     virtual ~BaseEncoder() = default;
 

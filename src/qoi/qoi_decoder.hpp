@@ -11,11 +11,11 @@ namespace QOI {
 class Decoder final : public BaseDecoder
 {
 private:
-    Settings settings;
+    Settings settings {};
 
 public:
     Decoder(InputStream &in, RawImage &image) :
-        BaseDecoder(in, image) {}
+        BaseDecoder { in, image } {}
 
     static bool can_decode(InputStream &in);
 

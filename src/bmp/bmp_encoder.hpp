@@ -13,14 +13,14 @@ namespace BMP {
 class Encoder final : public BaseEncoder
 {
 private:
-    Settings settings;
+    Settings settings {};
 
     // r + 255 g + 255^2 b => colors_table index
-    std::unordered_map<uint32_t, uint32_t> colors_table_indexes;
+    std::unordered_map<uint32_t, uint32_t> colors_table_indexes {};
 
 public:
     Encoder(OutputStream &out, RawImage &image) :
-        BaseEncoder(out, image) {}
+        BaseEncoder { out, image } {}
 
     void encode() override;
 

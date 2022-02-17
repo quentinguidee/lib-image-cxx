@@ -13,7 +13,7 @@ protected:
 
 public:
     BaseDecoder(InputStream& in, RawImage& image) :
-        in(in), image(image) {}
+        in { in }, image { image } {}
 
     virtual ~BaseDecoder() = default;
 

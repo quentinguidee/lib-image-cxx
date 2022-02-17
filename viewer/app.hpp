@@ -18,9 +18,9 @@ private:
     ImGuiIO* io;
     SDL_GLContext opengl_context;
 
-    std::vector<std::string> test_files;
+    std::vector<std::string> test_files {};
 
-    std::deque<ImageWidget> image_widgets;
+    std::deque<ImageWidget> image_widgets {};
 
 public:
     App();

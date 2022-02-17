@@ -6,8 +6,8 @@ namespace QOI {
 
 struct Settings
 {
-    Colorspace colorspace;
-    Channels channels;
+    Colorspace colorspace {};
+    Channels channels {};
 };
 
 }

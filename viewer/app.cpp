@@ -20,9 +20,7 @@
 #include "qoi_format.hpp"
 #include "raw_image.hpp"
 
-Viewer::App::App() :
-    test_files(),
-    image_widgets()
+Viewer::App::App()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -117,7 +115,7 @@ void Viewer::App::refresh_test_images()
     while ((file = readdir(directory)))
     {
         if (file->d_name[0] == 'i')
-            test_files.push_back(std::string(file->d_name));
+            test_files.push_back(std::string { file->d_name });
     }
 
     closedir(directory);
@@ -155,7 +153,7 @@ void Viewer::App::show_menu_bar_view()
 
 void Viewer::App::open_image_widget(const std::string& path)
 {
-    InputFileStream in("../test_images/" + path);
+    InputFileStream in { "../test_images/" + path };
     if (!in.is_open())
     {
         std::cout << "[ERROR] Couldn't open image '" << path << "'" << std::endl;
@@ -163,9 +161,9 @@ void Viewer::App::open_image_widget(const std::string& path)
     }
 
     if (QOI::Decoder::can_decode(in))
-        image_widgets.push_back(std::move(QOIImageWidget(in, path)));
+        image_widgets.push_back(std::move(QOIImageWidget { in, path }));
     else if (BMP::Decoder::can_decode(in))
-        image_widgets.push_back(std::move(BMPImageWidget(in, path)));
+        image_widgets.push_back(std::move(BMPImageWidget { in, path }));
     else
-        throw std::runtime_error("Couldn't decode this image.");
+        throw std::runtime_error { "Couldn't decode this image." };
 }
