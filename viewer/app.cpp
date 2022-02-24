@@ -20,7 +20,9 @@
 #include "qoi_format.hpp"
 #include "raw_image.hpp"
 
-Viewer::App::App()
+namespace Viewer {
+
+App::App()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -51,7 +53,7 @@ Viewer::App::App()
     refresh_test_images();
 }
 
-Viewer::App::~App()
+App::~App()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -62,7 +64,7 @@ Viewer::App::~App()
     SDL_Quit();
 }
 
-void Viewer::App::run()
+void App::run()
 {
     ImVec4 clear_color = ImVec4(0.05, 0.05, 0.07, 1);
 
@@ -101,7 +103,7 @@ void Viewer::App::run()
     }
 }
 
-void Viewer::App::refresh_test_images()
+void App::refresh_test_images()
 {
     test_files.clear();
     DIR* directory = opendir("../test_images");
@@ -121,7 +123,7 @@ void Viewer::App::refresh_test_images()
     closedir(directory);
 }
 
-void Viewer::App::show_menu_bar()
+void App::show_menu_bar()
 {
     ImGui::BeginMainMenuBar();
 
@@ -133,7 +135,7 @@ void Viewer::App::show_menu_bar()
     ImGui::EndMainMenuBar();
 }
 
-void Viewer::App::show_menu_bar_open()
+void App::show_menu_bar_open()
 {
     for (auto file : test_files)
         if (ImGui::MenuItem(file.c_str()))
@@ -146,12 +148,12 @@ void Viewer::App::show_menu_bar_open()
     ImGui::EndMenu();
 }
 
-void Viewer::App::show_menu_bar_view()
+void App::show_menu_bar_view()
 {
     ImGui::EndMenu();
 }
 
-void Viewer::App::open_image_widget(const std::string& path)
+void App::open_image_widget(const std::string& path)
 {
     InputFileStream in { "../test_images/" + path };
     if (!in.is_open())
@@ -166,4 +168,6 @@ void Viewer::App::open_image_widget(const std::string& path)
         image_widgets.push_back(std::move(BMPImageWidget { in, path }));
     else
         throw std::runtime_error { "Couldn't decode this image." };
+}
+
 }

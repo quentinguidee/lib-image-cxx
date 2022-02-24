@@ -3,12 +3,14 @@
 #include "exceptions.hpp"
 #include "pixel.hpp"
 
-bool QOI::Decoder::can_decode(InputStream &in)
+namespace QOI {
+
+bool Decoder::can_decode(InputStream &in)
 {
     return in.peek_u32() == HEADER_MAGIC;
 }
 
-void QOI::Decoder::decode()
+void Decoder::decode()
 {
     decode_header();
 
@@ -47,7 +49,7 @@ void QOI::Decoder::decode()
     }
 }
 
-void QOI::Decoder::decode_header()
+void Decoder::decode_header()
 {
     in.read_u32();
     image.width = in.read_u32();
@@ -56,12 +58,12 @@ void QOI::Decoder::decode_header()
     settings.colorspace = in.read_u8() == 0 ? Colorspace::SRGB : Colorspace::LINEAR;
 }
 
-uint8_t QOI::Decoder::decode_index()
+uint8_t Decoder::decode_index()
 {
     return in.read_u8();
 }
 
-void QOI::Decoder::decode_diff(Pixel &pixel)
+void Decoder::decode_diff(Pixel &pixel)
 {
     uint8_t value = in.read_u8();
 
@@ -74,7 +76,7 @@ void QOI::Decoder::decode_diff(Pixel &pixel)
     pixel.b += diff_b - 2;
 }
 
-void QOI::Decoder::decode_luma(Pixel &pixel)
+void Decoder::decode_luma(Pixel &pixel)
 {
     uint8_t value = in.read_u8();
     uint8_t diff_g = value & 0x3f;
@@ -88,7 +90,7 @@ void QOI::Decoder::decode_luma(Pixel &pixel)
     pixel.b += (diff_g - 32) + (diff_b_g - 8);
 }
 
-void QOI::Decoder::decode_rgb(Pixel &pixel)
+void Decoder::decode_rgb(Pixel &pixel)
 {
     in.read_u8();
     pixel.r = in.read_u8();
@@ -96,7 +98,7 @@ void QOI::Decoder::decode_rgb(Pixel &pixel)
     pixel.b = in.read_u8();
 }
 
-void QOI::Decoder::decode_rgba(Pixel &pixel)
+void Decoder::decode_rgba(Pixel &pixel)
 {
     in.read_u8();
     pixel.r = in.read_u8();
@@ -105,7 +107,9 @@ void QOI::Decoder::decode_rgba(Pixel &pixel)
     pixel.a = in.read_u8();
 }
 
-uint8_t QOI::Decoder::decode_run()
+uint8_t Decoder::decode_run()
 {
     return in.read_u8() & 0x3f;
+}
+
 }

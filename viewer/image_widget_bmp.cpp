@@ -2,8 +2,12 @@
 
 #include "bmp_decoder.hpp"
 
-Viewer::BMPImageWidget::BMPImageWidget(InputStream& in, const std::string& filename) :
+namespace Viewer {
+
+BMPImageWidget::BMPImageWidget(InputStream& in, const std::string& filename) :
     ImageWidget { filename }
 {
     BMP::Decoder { in, raw_image }.decode();
+}
+
 }

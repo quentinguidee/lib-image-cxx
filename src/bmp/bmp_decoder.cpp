@@ -9,12 +9,14 @@
 #include "log.hpp"
 #include "pixel.hpp"
 
-bool BMP::Decoder::can_decode(InputStream& in)
+namespace BMP {
+
+bool Decoder::can_decode(InputStream& in)
 {
     return in.peek_u16() == (uint16_t)Signature::BM;
 }
 
-void BMP::Decoder::decode()
+void Decoder::decode()
 {
     decode_header();
 
@@ -51,7 +53,7 @@ void BMP::Decoder::decode()
         image.flip_vertically();
 }
 
-void BMP::Decoder::decode_header()
+void Decoder::decode_header()
 {
     settings.signature = (Signature)in.read_u16();
     file_size = in.read_u32_le();
@@ -60,7 +62,7 @@ void BMP::Decoder::decode_header()
     settings.starting_address = in.read_u32_le();
 }
 
-void BMP::Decoder::decode_core_header()
+void Decoder::decode_core_header()
 {
     image.width = in.read_u16_le();
     image.height = in.read_u16_le();
@@ -68,7 +70,7 @@ void BMP::Decoder::decode_core_header()
     settings.bit_count = (BitCount)in.read_u16_le();
 }
 
-void BMP::Decoder::decode_info_header_v1()
+void Decoder::decode_info_header_v1()
 {
     image.width = in.read_i32_le();
     int32_t height = in.read_i32_le();
@@ -92,7 +94,7 @@ void BMP::Decoder::decode_info_header_v1()
     settings.important_colors_count = in.read_u32_le();
 }
 
-void BMP::Decoder::decode_info_header_v2()
+void Decoder::decode_info_header_v2()
 {
     decode_info_header_v1();
     settings.bitmask_r = Bitmask(in.read_u32_le());
@@ -100,13 +102,13 @@ void BMP::Decoder::decode_info_header_v2()
     settings.bitmask_b = Bitmask(in.read_u32_le());
 }
 
-void BMP::Decoder::decode_info_header_v3()
+void Decoder::decode_info_header_v3()
 {
     decode_info_header_v2();
     settings.bitmask_a = Bitmask(in.read_u32_le());
 }
 
-void BMP::Decoder::decode_info_header_v4()
+void Decoder::decode_info_header_v4()
 {
     decode_info_header_v3();
     settings.color_space_type = (LogicalColorSpace)in.read_u32_le();
@@ -125,7 +127,7 @@ void BMP::Decoder::decode_info_header_v4()
     settings.gamma_b = in.read_u32_le();
 }
 
-void BMP::Decoder::decode_info_header_v5()
+void Decoder::decode_info_header_v5()
 {
     decode_info_header_v4();
     settings.gamut_mapping_intent = (GamutMappingIntent)in.read_u32_le();
@@ -134,7 +136,7 @@ void BMP::Decoder::decode_info_header_v5()
     in.read_u32_le();
 }
 
-void BMP::Decoder::decode_color_table()
+void Decoder::decode_color_table()
 {
     settings.colors_table.reserve(settings.colors_count);
     for (uint32_t i = 0; i < settings.colors_count; ++i)
@@ -145,7 +147,7 @@ void BMP::Decoder::decode_color_table()
     }
 }
 
-void BMP::Decoder::decode_pixel_array()
+void Decoder::decode_pixel_array()
 {
     switch (settings.bit_count)
     {
@@ -173,7 +175,7 @@ void BMP::Decoder::decode_pixel_array()
     }
 }
 
-void BMP::Decoder::decode_pixel_array_up_to_4_bpp()
+void Decoder::decode_pixel_array_up_to_4_bpp()
 {
     const uint16_t BPP = (uint16_t)settings.bit_count;
     const int8_t BASE_OFFSET = 8 - BPP;
@@ -205,7 +207,7 @@ void BMP::Decoder::decode_pixel_array_up_to_4_bpp()
     }
 }
 
-void BMP::Decoder::decode_pixel_array_8_bpp()
+void Decoder::decode_pixel_array_8_bpp()
 {
     for (uint32_t y = 0; y < image.height; ++y)
     {
@@ -217,7 +219,7 @@ void BMP::Decoder::decode_pixel_array_8_bpp()
     }
 }
 
-void BMP::Decoder::decode_pixel_array_16_bpp()
+void Decoder::decode_pixel_array_16_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
@@ -237,7 +239,7 @@ void BMP::Decoder::decode_pixel_array_16_bpp()
     }
 }
 
-void BMP::Decoder::decode_pixel_array_24_bpp()
+void Decoder::decode_pixel_array_24_bpp()
 {
     if (settings.compression == Compression::BITFIELDS)
         throw DecodeException { "The bitfields compression method is not allowed for 24bpp images." };
@@ -252,7 +254,7 @@ void BMP::Decoder::decode_pixel_array_24_bpp()
     }
 }
 
-void BMP::Decoder::decode_pixel_array_32_bpp()
+void Decoder::decode_pixel_array_32_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
@@ -266,7 +268,7 @@ void BMP::Decoder::decode_pixel_array_32_bpp()
         decode_one_pixel_bitmask(in.read_u32_le());
 }
 
-void BMP::Decoder::decode_one_pixel_bitmask(uint32_t value)
+void Decoder::decode_one_pixel_bitmask(uint32_t value)
 {
     Pixel pixel {
         (uint8_t)(((value & settings.bitmask_r.value) >> settings.bitmask_r.offset) * (255 / settings.bitmask_r.divider)),
@@ -280,13 +282,13 @@ void BMP::Decoder::decode_one_pixel_bitmask(uint32_t value)
     image.pixels.push_back(pixel);
 }
 
-void BMP::Decoder::decode_one_pixel_color_table(uint8_t value)
+void Decoder::decode_one_pixel_color_table(uint8_t value)
 {
     Pixel pixel = settings.colors_table[value];
     image.pixels.push_back(pixel);
 }
 
-Pixel BMP::Decoder::read_one_pixel_r8g8b8()
+Pixel Decoder::read_one_pixel_r8g8b8()
 {
     Pixel pixel;
     pixel.b = in.read_u8();
@@ -294,4 +296,6 @@ Pixel BMP::Decoder::read_one_pixel_r8g8b8()
     pixel.r = in.read_u8();
     pixel.a = 255;
     return pixel;
+}
+
 }

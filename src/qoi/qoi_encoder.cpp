@@ -2,7 +2,9 @@
 
 #include "pixel.hpp"
 
-void QOI::Encoder::encode()
+namespace QOI {
+
+void Encoder::encode()
 {
     encode_header();
 
@@ -76,7 +78,7 @@ void QOI::Encoder::encode()
     encode_footer();
 }
 
-void QOI::Encoder::encode_header() const
+void Encoder::encode_header() const
 {
     out.write_u32(HEADER_MAGIC);
     out.write_u32(image.width);
@@ -85,24 +87,24 @@ void QOI::Encoder::encode_header() const
     out.write_u8(settings.colorspace == Colorspace::SRGB ? 0 : 1);
 }
 
-void QOI::Encoder::encode_index(uint8_t index) const
+void Encoder::encode_index(uint8_t index) const
 {
     out.write_u8(INDEX_TAG | index);
 }
 
-void QOI::Encoder::encode_diff(int8_t diff_r, int8_t diff_g, int8_t diff_b) const
+void Encoder::encode_diff(int8_t diff_r, int8_t diff_g, int8_t diff_b) const
 {
     uint8_t value = (diff_r + 2) << 4 | (diff_g + 2) << 2 | (diff_b + 2);
     out.write_u8(DIFF_TAG | (value & 0x3f));
 }
 
-void QOI::Encoder::encode_luma(int8_t diff_g, int8_t diff_r_g, int8_t diff_b_g) const
+void Encoder::encode_luma(int8_t diff_g, int8_t diff_r_g, int8_t diff_b_g) const
 {
     out.write_u8(LUMA_TAG | (diff_g + 32));
     out.write_u8((diff_r_g + 8) << 4 | (diff_b_g + 8));
 }
 
-void QOI::Encoder::encode_rgb(const Pixel &pixel) const
+void Encoder::encode_rgb(const Pixel &pixel) const
 {
     out.write_u8(RGB_TAG);
     out.write_u8(pixel.r);
@@ -110,7 +112,7 @@ void QOI::Encoder::encode_rgb(const Pixel &pixel) const
     out.write_u8(pixel.b);
 }
 
-void QOI::Encoder::encode_rgba(const Pixel &pixel) const
+void Encoder::encode_rgba(const Pixel &pixel) const
 {
     out.write_u8(RGBA_TAG);
     out.write_u8(pixel.r);
@@ -119,13 +121,15 @@ void QOI::Encoder::encode_rgba(const Pixel &pixel) const
     out.write_u8(pixel.a);
 }
 
-void QOI::Encoder::encode_run(uint8_t run) const
+void Encoder::encode_run(uint8_t run) const
 {
     out.write_u8(RUN_TAG | (run - 1));
 }
 
-void QOI::Encoder::encode_footer() const
+void Encoder::encode_footer() const
 {
     out.write_u32(0x00000000);
     out.write_u32(0x00000001);
+}
+
 }

@@ -9,7 +9,9 @@
 #include "exceptions.hpp"
 #include "log.hpp"
 
-void BMP::Encoder::encode()
+namespace BMP {
+
+void Encoder::encode()
 {
     generate_colors_table_indexes();
 
@@ -51,7 +53,7 @@ void BMP::Encoder::encode()
         image.flip_vertically();
 }
 
-void BMP::Encoder::encode_header()
+void Encoder::encode_header()
 {
     out.write_u16((uint16_t)settings.signature);
     out.write_u32_le(get_file_size());
@@ -60,7 +62,7 @@ void BMP::Encoder::encode_header()
     out.write_u32_le(get_pixel_array_offset());
 }
 
-void BMP::Encoder::encode_core_header()
+void Encoder::encode_core_header()
 {
     out.write_u16_le(image.width);
     out.write_u16_le(image.height);
@@ -68,7 +70,7 @@ void BMP::Encoder::encode_core_header()
     out.write_u16_le((uint16_t)settings.bit_count);
 }
 
-void BMP::Encoder::encode_info_header_v1()
+void Encoder::encode_info_header_v1()
 {
     out.write_i32_le(image.width);
     if (settings.start_decoding_position == StartDecodingPosition::TopLeft)
@@ -85,7 +87,7 @@ void BMP::Encoder::encode_info_header_v1()
     out.write_u32_le(settings.important_colors_count);
 }
 
-void BMP::Encoder::encode_info_header_v2()
+void Encoder::encode_info_header_v2()
 {
     encode_info_header_v1();
     out.write_u32_le(settings.bitmask_r.value);
@@ -93,13 +95,13 @@ void BMP::Encoder::encode_info_header_v2()
     out.write_u32_le(settings.bitmask_b.value);
 }
 
-void BMP::Encoder::encode_info_header_v3()
+void Encoder::encode_info_header_v3()
 {
     encode_info_header_v2();
     out.write_u32_le(settings.bitmask_a.value);
 }
 
-void BMP::Encoder::encode_info_header_v4()
+void Encoder::encode_info_header_v4()
 {
     encode_info_header_v3();
     out.write_u32_le((uint32_t)settings.color_space_type);
@@ -117,7 +119,7 @@ void BMP::Encoder::encode_info_header_v4()
     out.write_u32_le(settings.gamma_b);
 }
 
-void BMP::Encoder::encode_info_header_v5()
+void Encoder::encode_info_header_v5()
 {
     encode_info_header_v4();
     out.write_u32_le((uint32_t)settings.gamut_mapping_intent);
@@ -126,7 +128,7 @@ void BMP::Encoder::encode_info_header_v5()
     out.write_u32_le(0);
 }
 
-void BMP::Encoder::encode_color_table()
+void Encoder::encode_color_table()
 {
     for (Pixel& pixel : settings.colors_table)
     {
@@ -135,7 +137,7 @@ void BMP::Encoder::encode_color_table()
     }
 }
 
-void BMP::Encoder::encode_pixel_array()
+void Encoder::encode_pixel_array()
 {
     switch (settings.bit_count)
     {
@@ -163,7 +165,7 @@ void BMP::Encoder::encode_pixel_array()
     }
 }
 
-void BMP::Encoder::encode_pixel_array_up_to_4_bpp()
+void Encoder::encode_pixel_array_up_to_4_bpp()
 {
     const uint16_t BPP = (uint16_t)settings.bit_count;
     const int8_t BASE_OFFSET = 8 - BPP;
@@ -204,7 +206,7 @@ void BMP::Encoder::encode_pixel_array_up_to_4_bpp()
     }
 }
 
-void BMP::Encoder::encode_pixel_array_8_bpp()
+void Encoder::encode_pixel_array_8_bpp()
 {
     for (uint32_t y = 0; y < image.height; ++y)
     {
@@ -220,7 +222,7 @@ void BMP::Encoder::encode_pixel_array_8_bpp()
     }
 }
 
-void BMP::Encoder::encode_pixel_array_16_bpp()
+void Encoder::encode_pixel_array_16_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
@@ -249,7 +251,7 @@ void BMP::Encoder::encode_pixel_array_16_bpp()
     }
 }
 
-void BMP::Encoder::encode_pixel_array_24_bpp()
+void Encoder::encode_pixel_array_24_bpp()
 {
     if (settings.compression == Compression::BITFIELDS)
         throw std::runtime_error { "The bitfields compression method is not allowed for 24bpp images." };
@@ -264,7 +266,7 @@ void BMP::Encoder::encode_pixel_array_24_bpp()
     }
 }
 
-void BMP::Encoder::encode_pixel_array_32_bpp()
+void Encoder::encode_pixel_array_32_bpp()
 {
     if (settings.compression == Compression::RGB)
     {
@@ -287,14 +289,14 @@ void BMP::Encoder::encode_pixel_array_32_bpp()
     }
 }
 
-void BMP::Encoder::write_one_pixel_r8g8b8(const Pixel& pixel)
+void Encoder::write_one_pixel_r8g8b8(const Pixel& pixel)
 {
     out.write_u8(pixel.b);
     out.write_u8(pixel.g);
     out.write_u8(pixel.r);
 }
 
-uint32_t BMP::Encoder::get_pixel_array_offset() const
+uint32_t Encoder::get_pixel_array_offset() const
 {
     uint32_t header_size = FILE_HEADER_SIZE + (uint8_t)settings.header_version;
     uint32_t color_table_size = settings.colors_count;
@@ -305,7 +307,7 @@ uint32_t BMP::Encoder::get_pixel_array_offset() const
     return starting_address;
 }
 
-uint32_t BMP::Encoder::get_pixel_array_size() const
+uint32_t Encoder::get_pixel_array_size() const
 {
     uint32_t line_size = image.width * (uint16_t)settings.bit_count;
     if (line_size % 32 != 0)
@@ -313,12 +315,12 @@ uint32_t BMP::Encoder::get_pixel_array_size() const
     return (line_size / 8) * image.height;
 }
 
-uint32_t BMP::Encoder::get_file_size() const
+uint32_t Encoder::get_file_size() const
 {
     return get_pixel_array_offset() + get_pixel_array_size();
 }
 
-void BMP::Encoder::generate_colors_table_indexes()
+void Encoder::generate_colors_table_indexes()
 {
     colors_table_indexes.clear();
     colors_table_indexes.reserve(settings.colors_table.size());
@@ -328,4 +330,6 @@ void BMP::Encoder::generate_colors_table_indexes()
         const uint32_t hash = (pixel.r) + (pixel.g * 255) + (pixel.b * 255 * 255);
         colors_table_indexes.insert({ hash, i });
     }
+}
+
 }

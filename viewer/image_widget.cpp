@@ -10,21 +10,23 @@
 #include "log.hpp"
 #include "raw_image.hpp"
 
-constexpr const float Viewer::ImageWidget::ZOOM_LEVELS_VALUES[];
-constexpr const char* Viewer::ImageWidget::ZOOM_LEVELS_LABELS[];
+namespace Viewer {
 
-Viewer::ImageWidget::ImageWidget(const std::string& filename) :
+constexpr const float ImageWidget::ZOOM_LEVELS_VALUES[];
+constexpr const char* ImageWidget::ZOOM_LEVELS_LABELS[];
+
+ImageWidget::ImageWidget(const std::string& filename) :
     filename { filename }
 {
 }
 
-Viewer::ImageWidget::~ImageWidget()
+ImageWidget::~ImageWidget()
 {
     if (image_loaded)
         glDeleteTextures(1, &texture_id);
 }
 
-void Viewer::ImageWidget::initialize()
+void ImageWidget::initialize()
 {
     generate_widget_title();
 
@@ -60,7 +62,7 @@ void Viewer::ImageWidget::initialize()
     image_loaded = true;
 }
 
-bool Viewer::ImageWidget::show()
+bool ImageWidget::show()
 {
     if (!opened) return false;
     if (texture_id == 0) initialize();
@@ -80,7 +82,7 @@ bool Viewer::ImageWidget::show()
     return true;
 }
 
-void Viewer::ImageWidget::show_zoom_level_dropdown()
+void ImageWidget::show_zoom_level_dropdown()
 {
     if (ImGui::BeginCombo("Zoom", ZOOM_LEVELS_LABELS[current_zoom_level_id]))
     {
@@ -93,18 +95,20 @@ void Viewer::ImageWidget::show_zoom_level_dropdown()
     }
 }
 
-void Viewer::ImageWidget::show_image()
+void ImageWidget::show_image()
 {
     float zoom = ZOOM_LEVELS_VALUES[current_zoom_level_id];
     ImGui::Image((ImTextureID)(uintptr_t)texture_id, ImVec2(raw_image.width * zoom, raw_image.height * zoom));
 }
 
-void Viewer::ImageWidget::show_error()
+void ImageWidget::show_error()
 {
     ImGui::TextColored(ImVec4(0.8f, 0.1f, 0.1f, 1.0f), "%s", error_message.c_str());
 }
 
-void Viewer::ImageWidget::generate_widget_title()
+void ImageWidget::generate_widget_title()
 {
     widget_title = "[DECODER] " + filename + " (" + std::to_string(raw_image.width) + "×" + std::to_string(raw_image.height) + ")";
+}
+
 }
