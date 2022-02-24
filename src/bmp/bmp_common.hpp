@@ -8,13 +8,13 @@
 
 namespace BMP {
 
-constexpr uint8_t FILE_HEADER_SIZE = 14;
-constexpr uint8_t CORE_HEADER_SIZE = 12;
-constexpr uint8_t INFO_HEADER_V1_SIZE = 40;
-constexpr uint8_t INFO_HEADER_V2_SIZE = 52;
-constexpr uint8_t INFO_HEADER_V3_SIZE = 56;
-constexpr uint8_t INFO_HEADER_V4_SIZE = 108;
-constexpr uint8_t INFO_HEADER_V5_SIZE = 124;
+static constexpr uint8_t FILE_HEADER_SIZE = 14;
+static constexpr uint8_t CORE_HEADER_SIZE = 12;
+static constexpr uint8_t INFO_HEADER_V1_SIZE = 40;
+static constexpr uint8_t INFO_HEADER_V2_SIZE = 52;
+static constexpr uint8_t INFO_HEADER_V3_SIZE = 56;
+static constexpr uint8_t INFO_HEADER_V4_SIZE = 108;
+static constexpr uint8_t INFO_HEADER_V5_SIZE = 124;
 
 enum class HeaderVersion : uint8_t
 {
