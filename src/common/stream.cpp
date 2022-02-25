@@ -18,6 +18,13 @@ void InputStream::skip(uint8_t n_bytes)
     get_input_stream().seekg(n_bytes, std::ios::cur);
 }
 
+void InputStream::goto_complete_byte()
+{
+    if (current_bit == 0) return;
+    skip(1);
+    current_bit = 0;
+}
+
 long InputStream::size()
 {
     // TODO: Handle tellg error (if it returns -1).
@@ -47,6 +54,20 @@ long InputStream::remaining_size()
     input_stream.seekg(current_position);
 
     return end - current_position;
+}
+
+uint8_t InputStream::read_bits(uint8_t n_bits)
+{
+    assert(n_bits <= 8);
+
+    uint8_t value = 0;
+    for (uint8_t i = 0; i < n_bits; ++i)
+    {
+        value = (value << 1) + peek_u1();
+        if (++current_bit == 8)
+            goto_complete_byte();
+    }
+    return value;
 }
 
 InputFileStream::InputFileStream(const std::string& filename) :

@@ -12,6 +12,7 @@ static void test_write(OutputStream& out)
     out.write_u8(255);
     out.write_i8(-4);
     out.write_i8(127);
+    out.write_u8(0b10100110);
     out.write_u16(30000);
     out.write_i16(-25000);
     out.write_u16(0x1234);
@@ -26,7 +27,7 @@ static void test_write(OutputStream& out)
 }
 static void test_read(InputStream& in)
 {
-    EXPECT_EQ(in.size(), 44);
+    EXPECT_EQ(in.size(), 45);
 
     EXPECT_EQ(in.peek_u8(), 0);
     EXPECT_EQ(in.read_u8(), 0);
@@ -37,6 +38,11 @@ static void test_read(InputStream& in)
     EXPECT_EQ(in.read_i8(), -4);
     EXPECT_EQ(in.peek_i8(), 127);
     EXPECT_EQ(in.read_i8(), 127);
+    EXPECT_EQ(in.read_u1(), 1);
+    EXPECT_EQ(in.read_u1(), 0);
+    EXPECT_EQ(in.peek_u1(), 1);
+    EXPECT_EQ(in.read_u1(), 1);
+    EXPECT_EQ(in.read_bits(4), 0b0011);
     EXPECT_EQ(in.peek_u16(), 30000);
     EXPECT_EQ(in.read_u16(), 30000);
     EXPECT_EQ(in.peek_i16(), -25000);

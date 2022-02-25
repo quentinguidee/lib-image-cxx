@@ -9,7 +9,13 @@
 
 class InputStream
 {
+private:
+    uint8_t current_bit = 0;
+
 public:
+    uint8_t peek_u1() { return (peek_u8() & (0b10000000 >> current_bit)) >> (7 - current_bit); }
+    uint8_t read_u1() { return read_bits(1); }
+
     uint8_t peek_u8() { return get_input_stream().peek(); }
     uint8_t read_u8() { return get_input_stream().get(); }
     int8_t peek_i8() { return get_input_stream().peek(); }
@@ -44,6 +50,7 @@ public:
 
     void go_back(uint8_t n_bytes = 1);
     void skip(uint8_t n_bytes = 1);
+    void goto_complete_byte();
 
     long size();
     long remaining_size();
@@ -69,6 +76,7 @@ public:
     template <typename T>
     T read(uint8_t n_bytes)
     {
+        goto_complete_byte();
         T value = 0;
         for (int16_t offset = (n_bytes - 1) * BYTE; offset >= 0; offset -= BYTE)
             value |= (T)read_u8() << offset;
@@ -78,11 +86,14 @@ public:
     template <typename T>
     T read_le(uint8_t n_bytes)
     {
+        goto_complete_byte();
         T value = 0;
         for (uint16_t offset = 0; offset <= (n_bytes - 1) * BYTE; offset += BYTE)
             value |= (T)read_u8() << offset;
         return value;
     }
+
+    uint8_t read_bits(uint8_t n_bits);
 };
 
 class OutputStream
