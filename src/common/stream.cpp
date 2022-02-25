@@ -8,6 +8,30 @@
 
 #include "bits.hpp"
 
+uint8_t InputStream::peek_u8()
+{
+    goto_complete_byte();
+    return get_input_stream().peek();
+}
+
+uint8_t InputStream::read_u8()
+{
+    goto_complete_byte();
+    return get_input_stream().get();
+}
+
+int8_t InputStream::peek_i8()
+{
+    goto_complete_byte();
+    return get_input_stream().peek();
+}
+
+int8_t InputStream::read_i8()
+{
+    goto_complete_byte();
+    return get_input_stream().get();
+}
+
 void InputStream::go_back(uint8_t n_bytes)
 {
     get_input_stream().seekg(-n_bytes, std::ios::cur);
@@ -64,6 +88,20 @@ uint8_t InputStream::read_bits(uint8_t n_bits)
     for (uint8_t i = 0; i < n_bits; ++i)
     {
         value = (value << 1) + peek_u1();
+        if (++current_bit == 8)
+            goto_complete_byte();
+    }
+    return value;
+}
+
+uint8_t InputStream::read_bits_le(uint8_t n_bits)
+{
+    assert(n_bits <= 8);
+
+    uint8_t value = 0;
+    for (uint8_t i = 0; i < n_bits; ++i)
+    {
+        value = (value << 1) + peek_u1_le();
         if (++current_bit == 8)
             goto_complete_byte();
     }

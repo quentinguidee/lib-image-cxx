@@ -13,13 +13,15 @@ private:
     uint8_t current_bit = 0;
 
 public:
-    uint8_t peek_u1() { return (peek_u8() & (0b10000000 >> current_bit)) >> (7 - current_bit); }
+    uint8_t peek_u1() { return (get_input_stream().peek() & (0b10000000 >> current_bit)) >> (7 - current_bit); }
+    uint8_t peek_u1_le() { return (get_input_stream().peek() >> current_bit) & 1; }
     uint8_t read_u1() { return read_bits(1); }
+    uint8_t read_u1_le() { return read_bits_le(1); }
 
-    uint8_t peek_u8() { return get_input_stream().peek(); }
-    uint8_t read_u8() { return get_input_stream().get(); }
-    int8_t peek_i8() { return get_input_stream().peek(); }
-    int8_t read_i8() { return get_input_stream().get(); }
+    uint8_t peek_u8();
+    uint8_t read_u8();
+    int8_t peek_i8();
+    int8_t read_i8();
 
     uint16_t peek_u16() { return peek<uint16_t>(2); }
     uint16_t peek_u16_le() { return peek_le<uint16_t>(2); }
@@ -94,6 +96,7 @@ public:
     }
 
     uint8_t read_bits(uint8_t n_bits);
+    uint8_t read_bits_le(uint8_t n_bits);
 };
 
 class OutputStream
