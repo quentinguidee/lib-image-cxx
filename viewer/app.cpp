@@ -14,8 +14,11 @@
 #include "bmp_format.hpp"
 #include "image_widget.hpp"
 #include "image_widget_bmp.hpp"
+#include "image_widget_png.hpp"
 #include "image_widget_qoi.hpp"
 #include "imgui.h"
+#include "png_decoder.hpp"
+#include "png_format.hpp"
 #include "qoi_decoder.hpp"
 #include "qoi_format.hpp"
 #include "raw_image.hpp"
@@ -166,6 +169,8 @@ void App::open_image_widget(const std::string& path)
         image_widgets.push_back(std::move(QOIImageWidget { in, path }));
     else if (BMP::Decoder::can_decode(in))
         image_widgets.push_back(std::move(BMPImageWidget { in, path }));
+    else if (PNG::Decoder::can_decode(in))
+        image_widgets.push_back(std::move(PNGImageWidget { in, path }));
     else
         throw std::runtime_error { "Couldn't decode this image." };
 }

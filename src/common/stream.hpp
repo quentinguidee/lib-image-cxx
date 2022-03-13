@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <fstream>
+#include <ios>
 #include <istream>
 #include <sstream>
 
@@ -14,9 +15,9 @@ private:
 
 public:
     uint8_t peek_u1() { return (get_input_stream().peek() & (0b10000000 >> current_bit)) >> (7 - current_bit); }
-    uint8_t peek_u1_le() { return (get_input_stream().peek() >> current_bit) & 1; }
-    uint8_t read_u1() { return read_bits(1); }
-    uint8_t read_u1_le() { return read_bits_le(1); }
+    uint8_t peek_u1_le() { return (get_input_stream().peek() >> current_bit) & 0b00000001; }
+    uint8_t read_u1();
+    uint8_t read_u1_le();
 
     uint8_t peek_u8();
     uint8_t read_u8();
@@ -53,6 +54,9 @@ public:
     void go_back(uint8_t n_bytes = 1);
     void skip(uint8_t n_bytes = 1);
     void goto_complete_byte();
+    void goto_next_bit();
+    void goto_start();
+    void goto_end();
 
     long size();
     long remaining_size();
@@ -95,8 +99,25 @@ public:
         return value;
     }
 
-    uint8_t read_bits(uint8_t n_bits);
-    uint8_t read_bits_le(uint8_t n_bits);
+    template <typename T>
+    T read_bits(uint8_t n_bits)
+    {
+        T value = 0;
+        for (uint8_t i = 0; i < n_bits; ++i)
+            value = (value << 1) | read_u1();
+
+        return value;
+    }
+
+    template <typename T>
+    T read_bits_le(uint8_t n_bits)
+    {
+        T value = 0;
+        for (int8_t i = 0; i < n_bits; ++i)
+            value |= read_u1_le() << i;
+
+        return value;
+    }
 };
 
 class OutputStream
@@ -140,7 +161,7 @@ public:
 class BufferStream : public InputStream, public OutputStream
 {
 private:
-    std::stringstream stream;
+    std::stringstream stream { std::ios_base::binary | std::ios_base::in | std::ios_base::out };
 
 public:
     void clear() { stream.clear(); }

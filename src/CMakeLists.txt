@@ -1,6 +1,7 @@
 add_subdirectory(common)
 
 add_subdirectory(bmp)
+add_subdirectory(png)
 add_subdirectory(qoi)
 
 add_library(image formats.hpp formats.cpp)
@@ -9,5 +10,6 @@ target_link_libraries(image
     common
 
     bmp
+    png
     qoi
 )

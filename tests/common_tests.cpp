@@ -1,7 +1,13 @@
 #include <cstdio>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <string>
 #include <utility>
 
+#include "deflate_compressor.hpp"
 #include "gtest/gtest.h"
 #include "stream.hpp"
 
@@ -48,7 +54,7 @@ static void test_read(InputStream& in)
     EXPECT_EQ(in.read_u1(), 0);
     EXPECT_EQ(in.peek_u1(), 1);
     EXPECT_EQ(in.read_u1(), 1);
-    EXPECT_EQ(in.read_bits(4), 0b0011);
+    EXPECT_EQ(in.read_bits<uint8_t>(4), 0b0011);
     EXPECT_EQ(in.peek_u16(), 30000);
     EXPECT_EQ(in.read_u16(), 30000);
     EXPECT_EQ(in.peek_i16(), -25000);
@@ -93,4 +99,63 @@ TEST(CommonTest, FileStream)
     in.close();
 
     remove("temporary_stream_test");
+}
+
+TEST(CommonTest, HuffmanTree)
+{
+    std::vector<std::shared_ptr<Compression::HuffmanNode>> nodes = {
+        std::make_shared<Compression::HuffmanNode>(2, 'A'),
+        std::make_shared<Compression::HuffmanNode>(1, 'B'),
+        std::make_shared<Compression::HuffmanNode>(3, 'C'),
+        std::make_shared<Compression::HuffmanNode>(3, 'D'),
+    };
+
+    Compression::HuffmanTree tree { nodes };
+    BufferStream stream {};
+    stream.write_u16_le(0b0000001101110101);
+    ASSERT_EQ(tree.get_value(stream), 'A');
+    ASSERT_EQ(tree.get_value(stream), 'A');
+    ASSERT_EQ(tree.get_value(stream), 'D');
+    ASSERT_EQ(tree.get_value(stream), 'B');
+    ASSERT_EQ(tree.get_value(stream), 'C');
+}
+
+TEST(CommonTest, DeflateCompressorLevel0)
+{
+    BufferStream stream {};
+
+    stream.write_u32(0x7801010e);
+    stream.write_u32(0x00f1ff53);
+    stream.write_u32(0x6f6d6520);
+    stream.write_u32(0x74657874);
+    stream.write_u32(0x20686572);
+    stream.write_u32(0x6526e205);
+    stream.write_u8(0x3e);
+
+    Compression::DeflateCompressor compressor { stream };
+    std::vector<uint8_t> uncompressed_data = compressor.uncompress();
+    std::string s { uncompressed_data.begin(), uncompressed_data.end() };
+    EXPECT_EQ(s, "Some text here");
+}
+
+TEST(CommonTest, DeflateCompressorLevel1)
+{
+    BufferStream stream {};
+
+    stream.write_u32(0x78da0bce);
+    stream.write_u32(0xcf4d5528);
+    stream.write_u32(0x49ad2851);
+    stream.write_u32(0xc8482d02);
+    stream.write_u32(0xb232124b);
+    stream.write_u32(0x14328b15);
+    stream.write_u32(0x8a520b52);
+    stream.write_u32(0x134b5253);
+    stream.write_u32(0x74148af1);
+    stream.write_u32(0x2bd00300);
+    stream.write_u32(0x09bc1783);
+
+    Compression::DeflateCompressor compressor { stream };
+    std::vector<uint8_t> uncompressed_data = compressor.uncompress();
+    std::string s { uncompressed_data.begin(), uncompressed_data.end() };
+    EXPECT_EQ(s, "Some text here that is repeated, some text here that is repeated.");
 }
